@@ -5,6 +5,7 @@
         placeholder="Type to add new tasks"
         v-model="newTask"
     />
+    <button type="submit">Add Task</button>
   </form>
 </template>
 

@@ -16,11 +16,12 @@ Create a new file `TaskForm.jsx` in your `ui` folder.
 ```vue
 <template>
   <form className="new-task" @submit.prevent="handleSubmit">
-      <input
-        type="text"
-        placeholder="Type to add new tasks"
-        v-model="newTask"
-      />
+    <input
+      type="text"
+      placeholder="Type to add new tasks"
+      v-model="newTask"
+    />
+    <button type="submit">Add Task</button>
   </form>
 </template>
 
