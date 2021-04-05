@@ -1,9 +1,6 @@
 ## Meteor Vue Tutorial
 
-### MIGRATION IN PROGRESS
-Don't use this yet.
-
-If you are looking for the tutorial, please go to [https://react-tutorial.meteor.com](https://react-tutorial.meteor.com) and check it there. 
+If you are looking for the tutorial, please go to [https://vue-tutorial.meteor.com](https://vue-tutorial.meteor.com) and check it there. 
 
 This repository is the place to check the code (`src` folder) and to make contributions. 
 
