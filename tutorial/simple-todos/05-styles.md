@@ -12,7 +12,6 @@ Replace the content of our `client/main.css` file with the one below, the idea i
 - list of tasks.
 
 `client/main.css`
-
 ```css
 body {
   font-family: sans-serif;
@@ -88,9 +87,8 @@ header {
 
 .app-bar h1 {
   font-size: 1.5em;
-  margin: 0;
+  margin: 0 1em 0 0;
   display: inline-block;
-  margin-right: 1em;
 }
 
 .task-form {
@@ -152,41 +150,34 @@ header {
 
 Now you need to add some elements around your components. You are going to add a `className` to your main div in the `App`, also a `header` element with a few `divs` around your `h1`, and a main `div` around your form and list. Check below how it should be, pay attention to the name of the classes, they need to be the same as in the CSS file:
 
-`imports/ui/App.jsx`
-
-```js
-  ..
-  return (
-    <div className="app">
-      <header>
-        <div className="app-bar">
-          <div className="app-header">
-            <h1>Welcome to Meteor!</h1>
-          </div>
+`imports/ui/App.vue`
+```vue
+<template>
+  <div class="app">
+    <header>
+      <div className="app-bar">
+        <div className="app-header">
+          <h1>Todo List</h1>
         </div>
-      </header>
-
-      <div className="main">
-        <TaskForm />
-
-        <ul className="tasks">
-          {tasks.map(task => (
-            <Task
-              key={task._id}
-              task={task}
-              onCheckboxClick={toggleChecked}
-              onDeleteClick={deleteTask}
-            />
-          ))}
-        </ul>
       </div>
+    </header>
+    <div class="main">
+      <TaskForm />
+      <ul class="tasks">
+        <Task
+            class="task"
+            v-for="task in tasks"
+            v-bind:key="task._id"
+            v-bind:task="task"
+        />
+      </ul>
     </div>
-  );
+  </div>
+</template>
+..
 ```
 
-> In React we use `className` instead of `class` as React uses Javascript to define the UI and `class` is a reserved word in Javascript.
-
-Also choose a better title for your app, Meteor is amazing but you don't want to see `Welcome to Meteor!` in your app top bar all the time.
+Also choose a better title for your app, Meteor is amazing, but you don't want to see `Todo List` in your app top bar all the time.
 
 You could choose something like:
 

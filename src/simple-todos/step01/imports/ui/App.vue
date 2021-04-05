@@ -1,5 +1,5 @@
 <template>
-  <div className="container">
+  <div class="container">
     <header>
       <h1>Todo List</h1>
     </header>

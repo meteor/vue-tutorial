@@ -51,7 +51,7 @@ You will make your first change now. Create a new file called `Task.vue` in your
 This file will export a Vue component called `Task` that will represent one task in your To-Do list. 
 
 `imports/ui/components/Task.vue`
-```js
+```vue
 <template>
   <li>{{ this.task.text }}</li>
 </template>
@@ -73,7 +73,7 @@ As this component will be inside a list you are returning a `li` element.
 As you are not connecting to your server and your database yet let's define some sample data which will be used shortly to render a list of tasks. It will be an array, and you can call it `tasks`.
 
 `imports/ui/App.vue`
-```js
+```vue
 <script>
   import Vue from "vue";
   import Task from "./Task.vue";
@@ -107,9 +107,9 @@ Now we can implement some simple rendering logic with Vue. We can now use our pr
 See below how we change the template part of the App component ot add a 
 
 `imports/ui/App.vue`
-```js
+```vue
 <template>
-  <div className="container">
+  <div class="container">
     <header>
       <h1>Todo List</h1>
     </header>
@@ -130,136 +130,7 @@ Remember to add the `key` property to your task, otherwise React will emit a war
 
 With this override you have removed the `Hello` and `Info` from your `App` component. Remove the `Hello.jsx` and `Info.jsx` files as well.
 
-## 1.6 Styling
-
-Now, the list looks pretty ugly, so let's add some styling to make it look nice. We can do this in two ways. Either by adding it to the style element in our `App` component or by including it in `/client/main.css`.
-
-Both options will result in styles being applied in our app.
-
-`client/main.css`
-```css
-body {
-  font-family: sans-serif;
-  background-color: #315481;
-  background-image: linear-gradient(to bottom, #315481, #918e82 100%);
-  background-attachment: fixed;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 0;
-  margin: 0;
-  font-size: 14px;
-}
-
-.container {
-  max-width: 600px;
-  margin: 0 auto;
-  min-height: 100%;
-  background: white;
-}
-
-header {
-  background: #d2edf4;
-  background-image: linear-gradient(to bottom, #d0edf5, #e1e5f0 100%);
-  padding: 20px 15px 15px 15px;
-  position: relative;
-}
-
-#login-buttons {
-  display: block;
-}
-
-h1 {
-  font-size: 1.5em;
-  margin: 0 1em 10px 0;
-  display: inline-block;
-}
-
-form {
-  margin-top: 10px;
-  margin-bottom: -10px;
-  position: relative;
-}
-
-.new-task input {
-  box-sizing: border-box;
-  padding: 10px 80px 0 0;
-  background: transparent;
-  border: none;
-  width: 100%;
-  font-size: 1em;
-}
-
-.new-task input:focus {
-  outline: 0;
-}
-
-ul {
-  margin: 0;
-  padding: 0;
-  background: white;
-}
-
-.delete {
-  float: right;
-  font-weight: bold;
-  background: none;
-  font-size: 1em;
-  border: none;
-  position: relative;
-}
-
-li {
-  position: relative;
-  list-style: none;
-  padding: 15px;
-  border-bottom: #eee solid 1px;
-}
-
-li .text {
-  margin-left: 10px;
-}
-
-li.checked {
-  color: #888;
-}
-
-li.checked .text {
-  text-decoration: line-through;
-}
-
-li.private {
-  background: #eee;
-  border-color: #ddd;
-}
-
-header .hide-completed {
-  float: right;
-}
-
-.toggle-private {
-  margin-left: 5px;
-}
-
-@media (max-width: 600px) {
-  li {
-    padding: 12px 15px;
-  }
-
-  .search {
-    width: 150px;
-    clear: both;
-  }
-
-  .new-task input {
-    padding-bottom: 5px;
-  }
-}
-```
-
-## 1.7 Mobile look
+## 1.6 Mobile look
 
 Let's see how your app is looking on Mobile. You can simulate a mobile environment `right clicking` your app in the browser (we are assuming you are using Google Chrome as it is the most popular browser today) and then `inspect`, this will open a new window inside your browser called `Dev Tools`. In the `Dev Tools` you have a small icon showing a Mobile device and a Tablet, see where this icon is:
 

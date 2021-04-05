@@ -82,9 +82,9 @@ Vue.use(VueMeteorTracker);
 
 Then we need to modify the `App` component to get tasks from collection:
 `imports/ui/App.vue`
-```js
+```vue
 <template>
-  <div className="container">
+  <div class="container">
     <header>
       <h1>Todo List</h1>
     </header>
@@ -119,6 +119,13 @@ export default {
 };
 </script>
 ```
+
+Meteor skeletons are secure by default, but that is not what we want right now, so let's add `autopublish` package so that we can more easily prototype with out data:
+```bash
+meteor add autopublish
+```
+
+This is only for prototyping and is not something to do in any application that you are going to deploy. We'll talk more about this in step 10.
 
 See how your app should look like now:
 
