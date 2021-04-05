@@ -1,5 +1,5 @@
 {
-  "name": "simple-todos-react",
+  "name": "simple-todos-vue",
   "private": true,
   "scripts": {
     "start": "meteor run",
@@ -8,15 +8,15 @@
     "visualize": "meteor --production --extra-packages bundle-visualizer"
   },
   "dependencies": {
-    "@babel/runtime": "^7.10.5",
-    "bcrypt": "^5.0.0",
+    "@babel/runtime": "^7.11.2",
+    "bcrypt": "^5.0.1",
     "meteor-node-stubs": "^1.0.1",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "vue": "^2.6.12",
+    "vue-meteor-tracker": "^2.0.0-beta.5"
   },
   "meteor": {
     "mainModule": {
-      "client": "client/main.jsx",
+      "client": "client/main.js",
       "server": "server/main.js"
     },
     "testModule": "tests/main.js"

@@ -137,7 +137,7 @@ Now if we try to add anything to the collection we will get denied. For our prot
 meteor add insecure
 ```
 
-Being able to insert anything into the database from the client isn't very secure, but it's okay for now. In step 10 we'll learn how we can make our app secure and restrict how data is inserted into the database.
+Being able to insert anything into the database from the client isn't very secure, but it's okay for now. In step 8 we'll learn how we can make our app secure and restrict how data is inserted into the database.
 
 ## 3.5: Show Newest Tasks First
 

@@ -125,7 +125,7 @@ Meteor skeletons are secure by default, but that is not what we want right now, 
 meteor add autopublish
 ```
 
-This is only for prototyping and is not something to do in any application that you are going to deploy. We'll talk more about this in step 10.
+This is only for prototyping and is not something to do in any application that you are going to deploy. We'll talk more about this in step 9.
 
 See how your app should look like now:
 

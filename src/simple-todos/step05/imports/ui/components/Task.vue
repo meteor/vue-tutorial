@@ -3,7 +3,7 @@
     <input
       type="checkbox"
       readOnly
-      v-bind:checked="!!this.task.checked"
+      v-bind:checked="!!this.task.isChecked"
       @click="toggleChecked"
     />
     <span class="text">{{ this.task.text }}</span>
@@ -22,14 +22,14 @@ export default {
   },
   computed: {
     taskClassName: function() {
-      return this.task.checked ? "checked" : "";
+      return this.task.isChecked ? "checked" : "";
     }
   },
   methods: {
     toggleChecked() {
       // Set the checked property to the opposite of its current value
       TasksCollection.update(this.task._id, {
-        $set: { checked: !this.task.checked }
+        $set: { isChecked: !this.task.isChecked }
       });
     },
     deleteThisTask() {

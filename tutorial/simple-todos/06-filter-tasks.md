@@ -4,44 +4,68 @@ title: "6: Filter tasks"
 
 In this step you will filter your tasks by status and show the quantity of pending tasks.
 
-## 6.1: useState
+## 6.1: Filter tasks
 
 First you are going to add a button to show or hide the completed tasks from the list.
 
-The `useState` function from React is the best way to keep the state of this button. It returns an array with two items, where the first element is the value of the state, and the second is a setter function that is how you are going to update your state. You can use _array destructuring_ to get these two back and already declare a variable for them.
+We're going to learn how to use Vue's component state to store temporary information that is only used on the client.
 
-Bear in mind that the names used for the constants do not belong to the React API, you can name them whatever you like.
+First, we need to add a button to our App component:
 
-Also add a `button` below the task form that will display a different text based on the current state.
-
-`imports/ui/App.jsx`
-```js
-import React, { useState } from 'react';
+`imports/ui/App.vue`
+```vue
 ..
-export const App = () => {
-  const [hideCompleted, setHideCompleted] = useState(false);
- 
+<div class="main">
+  <TaskForm />
+  <div class="filter">
+    <button
+        v-model="hideCompleted"
+        @click="toggleHideCompleted"
+    >
+      <span v-if="hideCompleted">Show All</span>
+      <span v-else>Hide Completed Tasks</span>
+    </button>
+  </div>
   ..
-    <div className="main">
-      <TaskForm />
-       <div className="filter">
-         <button onClick={() => setHideCompleted(!hideCompleted)}>
-           {hideCompleted ? 'Show All' : 'Hide Completed'}
-         </button>
-       </div>
-  ..
+</div>
+..
 ```
 
-You can read more about the `useState` hook [here](https://reactjs.org/docs/hooks-state.html).
+You can see that it reads from `this.hideCompleted`. We'll need to initialize the value of `this.hideCompleted` in the component's data object:
 
-We recommend that you add your hooks always in the top of your components, so it will be easier to avoid some problems, like always running them in the same order.
+`imports/ui/App.vue`
+```vue
+..
+},
+  data() {
+    return {
+      hideCompleted: false
+    };
+  },
+  methods: {},
+..
+```
+
+We can update `this.hideCompleted` from an event handler directly, which will then cause the component to re-render:
+
+`imports/ui/App.vue`
+```vue
+..
+  },
+  methods: {
+    toggleHideCompleted() {
+      this.hideCompleted = !this.hideCompleted;
+    }
+  },
+  meteor: {
+..
+```
 
 ## 6.2: Button style
 
-You should add some style to your button so it does not look gray and without a good contrast. You can use the styles below as a reference:
+You should add some style to your button, so it does not look gray and without a good contrast. You can use the styles below as a reference:
 
 `client/main.css`
-
 ```css
 .filter {
   display: flex;
@@ -53,20 +77,23 @@ You should add some style to your button so it does not look gray and without a 
 }
 ```
 
-## 6.3: Filter Tasks
+## 6.3 Filter task
 
-Now, if the user wants to see only pending tasks you can add a filter to your selector in the Mini Mongo query, you want to get all the tasks that are not `isChecked` true.
-
-`imports/ui/App.jsx`
-```js
+Now, we need to update the list of tasks to filter out completed tasks when this.hideCompleted is true:
+`imports/ui/App.vue`
+```vue
 ..
-  const hideCompletedFilter = { isChecked: { $ne: true } };
+meteor: {
+  tasks() {
+    let filteredTasks = TasksCollection.find({}, { sort: { createdAt: -1 } }).fetch();
+    
+    if (this.hideCompleted) {
+      filteredTasks = filteredTasks.filter(task => !task.checked);
+    }
 
-  const tasks = useTracker(() =>
-    TasksCollection.find(hideCompleted ? hideCompletedFilter : {}, {
-      sort: { createdAt: -1 },
-    }).fetch()
-  );
+    return filteredTasks;
+  }
+}
 ..
 ```
 
@@ -90,22 +117,19 @@ Update the App component in order to show the number of pending tasks in the app
 
 You should avoid adding zero to your app bar when there are no pending tasks.
 
-`imports/ui/App.jsx`
-```js
+`imports/ui/App.vue`
+```vue
 ..
-  const pendingTasksCount = useTracker(() =>
-    TasksCollection.find(hideCompletedFilter).count()
-  );
-
-  const pendingTasksTitle = `${
-    pendingTasksCount ? ` (${pendingTasksCount})` : ''
-  }`;
-..
-
     <h1>
       📝️ To Do List
-      {pendingTasksTitle}
+      <span v-if="incompleteCount > 0">({{incompleteCount}})</span>
     </h1>
+..
+    return filteredTasks;
+  },
+  incompleteCount() {
+    return TasksCollection.find({ checked: { $ne: true } }).count();
+  }
 ..
 ```
 
