@@ -61,42 +61,63 @@ So you are importing the `TasksCollection` and adding a few tasks on it iteratin
 
 ## 2.3: Render Tasks Collection
 
-Now comes the fun part, you will render the tasks using a React Function Component and a Hook called `useTracker` from a package called [react-meteor-data](https://atmospherejs.com/meteor/react-meteor-data). 
+Now comes the fun part, you will render the tasks using a Vue "data container" to feed Meteor's reactive data into Vue's component hierarchy. We will use the [vue-meteor-tracker](https://www.npmjs.com/package/vue-meteor-tracker) package for this. 
 
 > Meteor works with Meteor packages and NPM packages, usually Meteor packages are using Meteor internals or other Meteor packages.
 
-This package is already included in the React skeleton (`meteor create --react yourproject`) so you don't need to add it but you can always add Meteor packages running `meteor add package-name`:
+This package is already included in the Vue skeleton (`meteor create --vue yourproject`), so you don't need to add it.
 
-```shell
-meteor add react-meteor-data
+Now you are ready to import code from this package.
+
+> When importing code from a Meteor package the only difference from NPM modules is that you need to prepend `meteor/` in the from part of your import.
+
+First we need to add the `VueMeteorTracker` to the root Vue instance:
+
+`client/main.js`
+```javascript
+import VueMeteorTracker from 'vue-meteor-tracker';
+
+Vue.use(VueMeteorTracker);
 ```
 
-Now you are ready to import code from this package, when importing code from a Meteor package the only difference from NPM modules is that you need to prepend `meteor/` in the from part of your import.
+Then we need to modify the `App` component to get tasks from collection:
+`imports/ui/App.vue`
+```js
+<template>
+  <div className="container">
+    <header>
+      <h1>Todo List</h1>
+    </header>
+    <ul>
+      <Task
+          v-for="task in tasks"
+          v-bind:key="task._id"
+          v-bind:task="task"
+      />
+    </ul>
+  </div>
+</template>
 
-The `useTracker` function exported by `react-meteor-data` is a React Hook that allows you to have reactivity in your React components. Every time the data changes through reactivity your component will re-render. Cool, right? 
+<script>
+import Vue from "vue";
+import Task from "./components/Task.vue";
+import { TasksCollection } from "../api/TasksCollection";
 
-> For more information about React Hooks read [here](https://reactjs.org/docs/hooks-faq.html).
-
-`imports/ui/App.jsx`
-```javascript
-import React from 'react';
-import { useTracker } from 'meteor/react-meteor-data';
-import { TasksCollection } from '/imports/api/TasksCollection';
-import { Task } from './Task';
- 
-export const App = () => {
-  const tasks = useTracker(() => TasksCollection.find({}).fetch());
- 
-  return (
-    <div>
-      <h1>Welcome to Meteor!</h1>
- 
-      <ul>
-        { tasks.map(task => <Task key={ task._id } task={ task }/>) }
-      </ul>
-    </div>
-  );
+export default {
+  components: {
+    Task
+  },
+  data() {
+    return {};
+  },
+  methods: {},
+  meteor: {
+    tasks() {
+      return TasksCollection.find({}).fetch();
+    }
+  }
 };
+</script>
 ```
 
 See how your app should look like now:
