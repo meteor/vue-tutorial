@@ -44,7 +44,6 @@ When you run with these options, you can also see the results of the tests in th
 However, if you would prefer to split your tests across multiple modules, you can do that too. Add a new test module called `imports/api/tasksMethods.tests.js`.
 
 `imports/api/tasksMethods.tests.js`
-
 ```js
 import { Meteor } from 'meteor/meteor';
 
@@ -106,7 +105,6 @@ meteor add quave:testing
 ```
 
 `imports/api/tasks.tests.js`
-
 ```js
 import { Meteor } from 'meteor/meteor';
 import { Random } from 'meteor/random';

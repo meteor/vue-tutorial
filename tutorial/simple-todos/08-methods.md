@@ -103,12 +103,11 @@ As you can see in the code we are also using the `check` package to make sure we
 The last part is to make sure your server is registering these methods, you can do this importing this file, to force the evaluation, in the `server/main.js`.
 
 `server/main.js`
-
 ```js
 import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
 import { TasksCollection } from '/imports/db/TasksCollection';
-import '/imports/api/tasksMethods';
+import './imports/api/tasksMethods';
 ```
 
 See that you don't need to get any symbol back from the import, you only need to ask for your server to import the file then `Meteor.methods` will be evaluated and will register your methods on server startup.
@@ -119,50 +118,44 @@ As you have defined your methods, you need to update the places we were operatin
 
 In the `TaskForm` file you should call `Meteor.call('tasks.insert', text);` instead of `TasksCollection.insert`. Remember to fix your imports as well.
 
-`imports/ui/TaskForm.jsx`
-```js
-import { Meteor } from 'meteor/meteor';
-import React, { useState } from 'react';
-
-export const TaskForm = () => {
-  const [text, setText] = useState('');
-
-  const handleSubmit = e => {
-    e.preventDefault();
-
-    if (!text) return;
-
-    Meteor.call('tasks.insert', text);
-
-    setText('');
-  };
+`imports/ui/components/TaskForm.vue`
+```vue
+..
+<script>
+  import { Meteor } from 'meteor/meteor';
   ..
-};
+  methods: {
+    handleSubmit(event) {
+      if (this.newTask.length === 0) return;
+
+      Meteor.call('tasks.insert', this.newTask.trim());
+
+      // Clear form
+      this.newTask = "";
+    }
+  },
+}
+</script>
 ```
 
 See that your `TaskForm` component does not need to receive the user anymore as we get the `userId` in the server.
 
-In the `App` file you should call `Meteor.call('tasks.setIsChecked', _id, !isChecked);` instead of `TasksCollection.update` and `Meteor.call('tasks.remove', _id)` instead of `TasksCollection.remove`.
+In the `Task` component you should call `Meteor.call('tasks.setIsChecked', _id, !isChecked);` instead of `TasksCollection.update` and `Meteor.call('tasks.remove', _id)` instead of `TasksCollection.remove`.
 
 Remember to also remove the user property from your `<TaskForm />`
 
-`imports/ui/App.jsx`
-```js
-import { Meteor } from 'meteor/meteor';
-import React, { useState, Fragment } from 'react';
-import { useTracker } from 'meteor/react-meteor-data';
-import { TasksCollection } from '/imports/db/TasksCollection';
-import { Task } from './Task';
-import { TaskForm } from './TaskForm';
-import { LoginForm } from './LoginForm';
-
-const toggleChecked = ({ _id, isChecked }) =>
-  Meteor.call('tasks.setIsChecked', _id, !isChecked);
-
-const deleteTask = ({ _id }) => Meteor.call('tasks.remove', _id);
+`imports/ui/components/Task.vue`
+```vue
 ..
-
-            <TaskForm />
+methods: {
+    toggleChecked() {
+      // Set the checked property to the opposite of its current value
+      Meteor.call('tasks.setIsChecked', this.task._id, !this.task.isChecked);
+    },
+    deleteThisTask() {
+      Meteor.call('tasks.remove', _id);
+    }
+}
 ..
 ```
 
@@ -176,11 +169,11 @@ Now your inputs and buttons will start working again. What you gained?
 
 We would like to take a moment here to think, the folder where the collection file is located is `api` but API in your project means a communication layer between server and client but the collection is not performing this role anymore. So you should move your `TasksCollection` file to a new folder called `db`.
 
-This change is not required but it's recommended to keep our names consistent with the reality.
+This change is not required, but it's recommended to keep our names consistent with the reality.
 
 Remember to fix your imports, you have 3 imports to `TasksCollection` in the following files:
 - `imports/api/tasksMethods.js`
-- `imports/ui/TaskForm.jsx`
+- `imports/ui/components/TaskForm.vue`
 - `server/main.js`
 
 they should be changed from `import { TasksCollection } from '/imports/api/TasksCollection';` to `import { TasksCollection } from '/imports/db/TasksCollection';`.

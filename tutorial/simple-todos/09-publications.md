@@ -24,7 +24,6 @@ You need to add first a publication to your server, this publication should publ
 Create a new file called `tasksPublications.js` in the `api` folder.
 
 `imports/api/tasksPublications.js`
-
 ```js
 import { Meteor } from 'meteor/meteor';
 import { TasksCollection } from '/imports/db/TasksCollection';
@@ -39,7 +38,6 @@ As you are using `this` inside this function you should not use `arrow function`
 The last part is to make sure your server is registering this publication, you can do this importing this file, to force the evaluation, in the `server/main.js`.
 
 `server/main.js`
-
 ```js
 import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
@@ -52,35 +50,18 @@ import '/imports/api/tasksPublications';
 
 Then we can subscribe to that publication in the client.
 
-As we want to receive changes from this publication we are going to `subscribe` to it inside a `useTracker` hook.
+As we want to receive changes from this publication we are going to `subscribe` to it inside our `meteor` object with `$subscribe`. See the [documentation](https://www.npmjs.com/package/vue-meteor-tracker#subscriptions) for more information.
 
-It's also a good moment for us to refactor our code to use a single `useTracker` to get data from `TasksCollection`.
-
-`imports/ui/App.jsx`
-
-```js
+`imports/ui/App.vue`
+```vue
 ..
-  const { tasks, pendingTasksCount, isLoading } = useTracker(() => {
-    const noDataAvailable = { tasks: [], pendingTasksCount: 0 };
-    if (!Meteor.user()) {
-      return noDataAvailable;
-    }
-    const handler = Meteor.subscribe('tasks');
-
-    if (!handler.ready()) {
-      return { ...noDataAvailable, isLoading: true };
-    }
-
-    const tasks = TasksCollection.find(
-      hideCompleted ? pendingOnlyFilter : userFilter,
-      {
-        sort: { createdAt: -1 },
-      }
-    ).fetch();
-    const pendingTasksCount = TasksCollection.find(pendingOnlyFilter).count();
-
-    return { tasks, pendingTasksCount };
-  });
+meteor: {
+    $subscribe: {
+      'tasks': []
+    },
+    tasks() {
+..
+}
 ..
 ```
 
@@ -88,19 +69,15 @@ It's also a good moment for us to refactor our code to use a single `useTracker`
 
 You should also add a loading state for your app, that means, while the subscription data is not ready you should inform this to your user. To discover if the subscription is ready or not you should get the return of the `subscribe` call, it is an object with the subscription state including the `ready` function that will return a `boolean`. 
 
-`imports/ui/App.jsx`
+`imports/ui/App.vue`
 
-```js
+```vue
 ..
-            <div className="filter">
-              <button onClick={() => setHideCompleted(!hideCompleted)}>
-                {hideCompleted ? 'Show All' : 'Hide Completed'}
-              </button>
-            </div>
+</div>
 
-            {isLoading && <div className="loading">loading...</div>}
+<div class="loading" v-if="!$subReady.tasks">Loading...</div>
 
-            <ul className="tasks">
+<ul class="tasks">
 ..
 ```
 
@@ -130,7 +107,6 @@ Calling `Meteor.publish` on the server registers a publication named `tasks`. Wh
 Only the owner of a task should be able to change certain things. You should change your methods to check if the user that is authenticated is the same user that created the tasks.
 
 `imports/api/tasksMethods.js`
-
 ```js
 ..
   'tasks.remove'(taskId) {

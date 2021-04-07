@@ -1,15 +1,12 @@
 ## Meteor Vue Tutorial
 
-### MIGRATION IN PROGRESS
-Don't use this yet.
-
-If you are looking for the tutorial, please go to [https://react-tutorial.meteor.com](https://react-tutorial.meteor.com) and check it there. 
+If you are looking for the tutorial, please go to [https://vue-tutorial.meteor.com](https://vue-tutorial.meteor.com) and check it there. 
 
 This repository is the place to check the code (`src` folder) and to make contributions. 
 
 Read in the tutorial home page where you should ask questions (spoiler: [Forums](https://forums.meteor.com) or [Slack](https://join.slack.com/t/meteor-community/shared_invite/enQtODA0NTU2Nzk5MTA3LWY5NGMxMWRjZDgzYWMyMTEyYTQ3MTcwZmU2YjM5MTY3MjJkZjQ0NWRjOGZlYmIxZjFlYTA5Mjg4OTk3ODRiOTc)).
 
-This is a [hexo](https://hexo.io) static site used to generate the [Meteor React Tutorial Docs](https://react-tutorial.meteor.com).
+This is a [hexo](https://hexo.io) static site used to generate the [Meteor Vue Tutorial Docs](https://vue-tutorial.meteor.com).
 
 ## Contributing
 

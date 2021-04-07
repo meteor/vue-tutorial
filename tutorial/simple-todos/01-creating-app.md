@@ -20,10 +20,10 @@ choco install meteor
 
 ## 1.2: Create Meteor Project
 
-The easiest way to setup Meteor with React is by using the command `meteor create` with the option `--react` and your project name:
+The easiest way to setup Meteor with Vue is by using the command `meteor create` with the option `--vue` and your project name:
 
 ```
-meteor create --react simple-todos-react
+meteor create --vue simple-todos-vue
 ```
 
 Meteor will create all the necessary files for you. 
@@ -46,17 +46,24 @@ Take a quick look in all the files created by Meteor, you don't need to understa
 
 ## 1.3: Create Task Component
 
-You will make your first change now. Create a new file called `Task.jsx` in your `ui` folder.
+You will make your first change now. Create a new file called `Task.vue` in your `ui/components` folder.
 
-This file will export a React component called `Task` that will represent one task in your To-Do list. 
+This file will export a Vue component called `Task` that will represent one task in your To-Do list. 
 
-`imports/ui/Task.jsx`
-```js
-import React from 'react';
- 
-export const Task = ({ task }) => {
-  return <li>{task.text}</li>
+`imports/ui/components/Task.vue`
+```vue
+<template>
+  <li>{{ this.task.text }}</li>
+</template>
+
+<script>
+  export default {
+      props: ["task"],
+      data() {
+      return {};
+  }
 };
+</script>
 ```
 
 As this component will be inside a list you are returning a `li` element.
@@ -65,52 +72,63 @@ As this component will be inside a list you are returning a `li` element.
 
 As you are not connecting to your server and your database yet let's define some sample data which will be used shortly to render a list of tasks. It will be an array, and you can call it `tasks`.
 
-`imports/ui/App.jsx`
-```js
-import React from 'react';
- 
-const tasks = [
-  {_id: 1, text: 'First Task'},
-  {_id: 2, text: 'Second Task'},
-  {_id: 3, text: 'Third Task'},
-];
- 
-export const App = () => ...
+`imports/ui/App.vue`
+```vue
+<script>
+  import Vue from "vue";
+  import Task from "./Task.vue";
+
+  export default {
+      components: {
+        Task
+      },
+      data() {
+          return {};
+      },
+      methods: {
+      getTasks() {
+      return [
+        { _id: 1, text: "This is task 1" },
+        { _id: 2, text: "This is task 2" },
+        { _id: 3, text: "This is task 3" }
+      ];
+    }
+  }
+};
+</script>
 ```
 
 You can put anything as your `text` property on each task. Be creative!
 
 ## 1.5: Render Sample Tasks
 
-Now we can implement some simple rendering logic with React. We can now use our previous `Task` component to render our list items.
+Now we can implement some simple rendering logic with Vue. We can now use our previous `Task` component to render our list items.
 
-In React you can use `{` `}` to write Javascript code between them.
+See below how we change the template part of the App component ot add a 
 
-See below that you will use a `.map` function from the `Array` object to iterate over your sample tasks.
-
-`imports/ui/App.jsx`
-```js
-import React from 'react';
-import { Task } from './Task';
- 
-const tasks = ..;
-
-export const App = () => (
-  <div>
-    <h1>Welcome to Meteor!</h1>
- 
+`imports/ui/App.vue`
+```vue
+<template>
+  <div class="container">
+    <header>
+      <h1>Todo List</h1>
+    </header>
     <ul>
-      { tasks.map(task => <Task key={ task._id } task={ task }/>) }
+      <Task
+        v-for="task in getTasks()"
+        v-bind:key="task._id"
+        v-bind:task="task"
+      />
     </ul>
   </div>
-);
+</template>
 ```
 
 Remember to add the `key` property to your task, otherwise React will emit a warning as it will see many components of the same type as siblings and without a key it will be hard to React to re-render one of them if necessary 
 
-> You can read more about React and Keys [here](https://reactjs.org/docs/lists-and-keys.html#keys).
+> You can read more about Vue iterations [here](https://vuejs.org/v2/api/#v-for).
 
-Remove the `Hello` and `Info` from your `App` component, remember to also remove the imports for them in top of the file. Remove the `Hello.jsx` and `Info.jsx` files as well.
+With this override you have removed the `Hello` and `Info` from your `App` component. Remove the `Hello.jsx` and `Info.jsx` files as well.
 
 ## 1.6 Mobile look
 
@@ -147,6 +165,6 @@ Now your app should look like this:
 
 <img width="200px" src="/simple-todos/assets/step01-mobile-with-meta-tags.png"/>
 
-> Review: you can check how your code should be in the end of this step [here](https://github.com/meteor/react-tutorial/tree/master/src/simple-todos/step01) 
+> Review: you can check how your code should be in the end of this step [here](https://github.com/meteor/vue-tutorial/tree/master/src/simple-todos/step01) 
 
 In the next step we are going to work with MongoDB database to store our tasks.

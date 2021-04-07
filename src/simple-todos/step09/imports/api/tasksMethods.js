@@ -1,5 +1,5 @@
 import { check } from 'meteor/check';
-import { TasksCollection } from '/imports/db/TasksCollection';
+import { TasksCollection } from '../db/TasksCollection';
 
 Meteor.methods({
   'tasks.insert'(text) {
@@ -11,9 +11,9 @@ Meteor.methods({
 
     TasksCollection.insert({
       text,
-      createdAt: new Date(),
+      createdAt: new Date,
       userId: this.userId,
-    });
+    })
   },
 
   'tasks.remove'(taskId) {

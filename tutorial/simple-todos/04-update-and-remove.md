@@ -10,56 +10,65 @@ First, you need to add a `checkbox` element to your `Task` component.
 
 > Be sure to add the `readOnly` attribute since we are not using `onChange` to update the state.
 >
-> We also have to force our `checked` prop to a `boolean` since React understands that an `undefined` value as inexistent, therefore causing the component to switch from uncontrolled to a controlled one.
->
 > You are also invited to experiment and see how the app behaves for learning purposes.
 
 You also want to receive a callback, a function that will be called when the checkbox is clicked.
 
-`imports/ui/Task.jsx`
-
-```js
-import React from 'react';
-
-export const Task = ({ task, onCheckboxClick }) => {
-  return (
-    <li>
-      <input
-        type="checkbox"
-        checked={!!task.isChecked}
-        onClick={() => onCheckboxClick(task)}
-        readOnly
-      />
-      <span>{task.text}</span>
-    </li>
-  );
-};
+`imports/ui/components/Task.vue`
+```vue
+<template>
+  <li v-bind:class="taskClassName">
+    <input
+      type="checkbox"
+      readOnly
+      v-bind:checked="!!this.task.checked"
+    @click="toggleChecked"
+  />
+  <span class="text">{{ this.task.text }}</span>
+</li>
+</template>
+ ..
 ```
 
 ## 4.2: Toggle Checkbox
 
-Now you can update your task document toggling its `isChecked` field.
+Now you can update your task document toggling its `checked` field.
 
 Create a function to change your document and pass it along to your `Task` component.
 
-`imports/ui/App.jsx`
-
-```js
-const toggleChecked = ({ _id, isChecked }) => {
-  TasksCollection.update(_id, {
-    $set: {
-      isChecked: !isChecked
-    }
-  })
-};
-
-export const App = () => {
-  ..
-  <ul>
-    { tasks.map(task => <Task key={ task._id } task={ task } onCheckboxClick={toggleChecked} />) }
-  </ul>
-  ..
+`imports/ui/components/Task.vue`
+```vue
+..
+<script>
+    import { TasksCollection } from "../../api/TasksCollection";
+    export default {
+      props: ["task"],
+      data() {
+        return {};
+      },
+      computed: {
+        taskClassName: function() {
+          return this.task.checked ? "checked" : "";
+        }
+      },
+      methods: {
+        toggleChecked() {
+          // Set the checked property to the opposite of its current value
+          TasksCollection.update(this.task._id, {
+            $set: { checked: !this.task.checked }
+          });
+        },
+      }
+    };
+</script>
+..
 ```
+
+We call `TasksCollection.update` to check off a task.
+
+The `update` function on a collection takes two arguments. The first is a selector that identifies a subset of the collection, and the second is an update parameter that specifies what should be done to the matched objects.
+
+In this case, the selector is just the `_id` of the relevant task. The update parameter uses `$set` to toggle the `checked` field, which will represent whether the task has been completed.
 
 Your app should look like this:
 
@@ -71,38 +80,27 @@ You can remove tasks with just a few lines of code.
 
 First add a button after text in your `Task` component and receive a callback function.
 
-`imports/ui/Task.jsx`
-
-```js
-import React from 'react';
-
-export const Task = ({ task, onCheckboxClick, onDeleteClick }) => {
-  return (
+`imports/ui/components/Task.vue`
+```vue
 ..
-      <span>{task.text}</span>
-      <button onClick={ () => onDeleteClick(task) }>&times;</button>
+<button class="delete" @click="deleteThisTask">
+×
+</button>
 ..
 ```
 
-Now add the removal logic in the `App`, you need to have a function to delete the task and provide this function in your callback property in the `Task` component:
+Now add the removal logic into methods:
 
-`imports/ui/App.jsx`
-
-```js
-const deleteTask = ({ _id }) => TasksCollection.remove(_id);
-
-export const App = () => {
+`imports/ui/components/Task.vue`
+```vue
+..  
+  methods: {
+    ..
+    deleteThisTask() {
+      TasksCollection.remove(this.task._id);
+    }
+  }
   ..
-  <ul>
-    { tasks.map(task => <Task
-      key={ task._id }
-      task={ task }
-      onCheckboxClick={toggleChecked}
-      onDeleteClick={deleteTask}
-    />) }
-  </ul>
-  ..
-}
 ```
 
 Your app should look like this:
