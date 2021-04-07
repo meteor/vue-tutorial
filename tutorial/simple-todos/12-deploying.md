@@ -6,7 +6,7 @@ Now your app is tested and ready to be published so anyone can use it.
 
 The best place to run your Meteor app is [Galaxy](https://www.meteor.com/hosting). Galaxy offers free trial, so you can use up to 4 GBs without any cost for 30 days. Cool, right?
 
-> If you have any trouble on this step you should send an email to Galaxy support and they are going to help you, send your message to `support@meteor.com`. Try to explain in details what is the issue and you are going to receive help as soon as possible. Also make sure you include in the subject: `React Tutorial` so you know where are you coming from.
+> If you have any trouble on this step you should send an email to Galaxy support and they are going to help you, send your message to `support@meteor.com`. Try to explain in details what is the issue and you are going to receive help as soon as possible. Also make sure you include in the subject: `Vue Tutorial` so you know where are you coming from.
 
 ## 12.1: Create your account
 
