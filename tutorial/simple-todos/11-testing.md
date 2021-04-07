@@ -24,7 +24,7 @@ TEST_WATCH=1 meteor test --driver-package meteortesting:mocha
 It should output something like this:
 
 ```
-simple-todos-react
+simple-todos-vue
   ✓ package.json has correct name
   ✓ server is not client
 

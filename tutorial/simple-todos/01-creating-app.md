@@ -5,7 +5,7 @@ title: "1: Creating the app"
 ## 1.1: Install Meteor
 First we need to install Meteor.
 
-If you running on OSX or Linux run this command in your terminal:
+If you are running on OSX or Linux run this command in your terminal:
 ```shell
 curl https://install.meteor.com/ | sh
 ```
@@ -40,9 +40,9 @@ meteor run
 
 Don't worry, Meteor will keep your app in sync with all your changes from now on.
 
-Your React code will be located inside the `imports/ui` directory, and `App.jsx` file is the root component of your React To-do app.
+Your Vue code will be located inside the `imports/ui` directory, and `App.vue` file is the root component of your Vue To-do app.
 
-Take a quick look in all the files created by Meteor, you don't need to understand them now but it's good to know where they are.
+Take a quick look in all the files created by Meteor, you don't need to understand them now, but it's good to know where they are.
 
 ## 1.3: Create Task Component
 
@@ -123,8 +123,6 @@ See below how we change the template part of the App component ot add a
   </div>
 </template>
 ```
-
-Remember to add the `key` property to your task, otherwise React will emit a warning as it will see many components of the same type as siblings and without a key it will be hard to React to re-render one of them if necessary 
 
 > You can read more about Vue iterations [here](https://vuejs.org/v2/api/#v-for).
 
