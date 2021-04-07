@@ -252,6 +252,6 @@ This is almost the same as the earlier command, except that it also loads your a
 
 There's a lot more you can do with Meteor tests! You can read more about it in the Meteor Guide [article on testing](https://guide.meteor.com/testing.html).
 
-> Review: you can check how your code should be in the end of this step [here](https://github.com/meteor/react-tutorial/tree/master/src/simple-todos/step11) 
+> Review: you can check how your code should be in the end of this step [here](https://github.com/meteor/vue-tutorial/tree/master/src/simple-todos/step11) 
 
 In the next step we are going to deploy your app to Galaxy, the best hosting for Meteor apps, developed by the same team behind Meteor.

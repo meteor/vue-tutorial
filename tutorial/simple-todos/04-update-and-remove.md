@@ -107,6 +107,6 @@ Your app should look like this:
 
 <img width="200px" src="/simple-todos/assets/step04-delete-button.png"/>
 
-> Review: you can check how your code should be in the end of this step [here](https://github.com/meteor/react-tutorial/tree/master/src/simple-todos/step04) 
+> Review: you can check how your code should be in the end of this step [here](https://github.com/meteor/vue-tutorial/tree/master/src/simple-todos/step04) 
 
 In the next step we are going to improve the look of your app using CSS with Flexbox.

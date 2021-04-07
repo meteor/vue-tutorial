@@ -10,7 +10,7 @@ This is a [hexo](https://hexo.io) static site used to generate the [Meteor Vue T
 
 ## Contributing
 
-We'd love your contributions! Please send us Pull Requests or open issues on [github](https://github.com/meteor/react-tutorial). Also, read the [contribution guidelines](https://github.com/meteor/docs/blob/master/Contributing.md).
+We'd love your contributions! Please send us Pull Requests or open issues on [github](https://github.com/meteor/vue-tutorial). Also, read the [contribution guidelines](https://github.com/meteor/docs/blob/master/Contributing.md).
 
 If you are making a larger contribution, you may need to run the site locally:
 

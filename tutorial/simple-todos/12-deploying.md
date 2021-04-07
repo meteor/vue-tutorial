@@ -83,7 +83,7 @@ meteor deploy vue-tutorial.meteorapp.com --settings private/settings.json
 Talking to Galaxy servers at https://us-east-1.galaxy-deploy.meteor.com
 Preparing to build your app...                
 Preparing to upload your app... 
-Uploaded app bundle for new app at react-tutorial.meteorapp.com.
+Uploaded app bundle for new app at vue-tutorial.meteorapp.com.
 Galaxy is building the app into a native image.
 Waiting for deployment updates from Galaxy... 
 Building app image...                         
@@ -102,12 +102,12 @@ You can check your logs on Galaxy, including the part that Galaxy is building yo
 
 Now you should be able to access your Galaxy dashboard at `https://galaxy.meteor.com/app/vue-tutorial.meteorapp.com` (replacing `vue-tutorial` with your sub-domain)
 
-And, of course, be able to access and use your app in the domain that you chose, in our case here [vue-tutorial.meteorapp.com](http://react-tutorial.meteorapp.com). Congrats!
+And, of course, be able to access and use your app in the domain that you chose, in our case here [vue-tutorial.meteorapp.com](http://vue-tutorial.meteorapp.com). Congrats!
 
 > We deployed to Galaxy running in the US (us-east-1), we also have Galaxy running in other regions in the world, check the list [here](https://galaxy-guide.meteor.com/deploy-region.html) 
 
 This is huge, you have your Meteor app running on Galaxy, ready to be used by anyone in the world!
 
-> Review: you can check how your code should be in the end of this step [here](https://github.com/meteor/react-tutorial/tree/master/src/simple-todos/step12) 
+> Review: you can check how your code should be in the end of this step [here](https://github.com/meteor/vue-tutorial/tree/master/src/simple-todos/step12) 
 
 In the next step we are going to provide some ideas for you to continue developing your app and more content to see next.
