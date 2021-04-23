@@ -153,7 +153,7 @@ methods: {
       Meteor.call('tasks.setIsChecked', this.task._id, !this.task.isChecked);
     },
     deleteThisTask() {
-      Meteor.call('tasks.remove', _id);
+      Meteor.call('tasks.remove', this.task._id);
     }
 }
 ..

@@ -14,7 +14,6 @@
 </template>
 
 <script>
-import { TasksCollection } from "../../db/TasksCollection";
 import { Meteor } from 'meteor/meteor';
 export default {
   props: ["task"],
@@ -32,7 +31,7 @@ export default {
       Meteor.call('tasks.setIsChecked', this.task._id, !this.task.isChecked);
     },
     deleteThisTask() {
-      Meteor.call('tasks.remove', _id);
+      Meteor.call('tasks.remove', this.task._id);
     }
   }
 };
