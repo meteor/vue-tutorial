@@ -76,7 +76,7 @@ As you are not connecting to your server and your database yet let's define some
 ```vue
 <script>
   import Vue from "vue";
-  import Task from "./Task.vue";
+  import Task from "./components/Task.vue";
 
   export default {
       components: {
