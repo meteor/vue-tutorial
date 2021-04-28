@@ -33,3 +33,7 @@ content_root: tutorial
 
 highlight:
   enable: false
+
+logo:
+  title:
+  subtitle: Vue Tutorial
