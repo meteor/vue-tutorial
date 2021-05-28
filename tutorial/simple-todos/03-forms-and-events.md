@@ -117,7 +117,7 @@ As you can see, in Vue you handle DOM events by directly referencing a method on
 
   methods: {
     handleSubmit(event) {
-      Tasks.insert({
+      TasksCollection.insert({
         text: this.newTask,
         createdAt: new Date() // current time
       });
