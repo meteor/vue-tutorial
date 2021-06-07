@@ -126,7 +126,7 @@ See below how we change the template part of the App component to add a
 
 > You can read more about Vue iterations [here](https://vuejs.org/v2/api/#v-for).
 
-With this override you have removed the `Hello` and `Info` from your `App` component. Remove the `Hello.jsx` and `Info.jsx` files as well.
+With this override you have removed the `Hello` and `Info` from your `App` component. Remove the `Hello.vue` and `Info.vue` files as well.
 
 ## 1.6 Mobile look
 
