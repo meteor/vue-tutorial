@@ -104,7 +104,7 @@ You can put anything as your `text` property on each task. Be creative!
 
 Now we can implement some simple rendering logic with Vue. We can now use our previous `Task` component to render our list items.
 
-See below how we change the template part of the App component ot add a 
+See below how we change the template part of the App component to add a 
 
 `imports/ui/App.vue`
 ```vue
