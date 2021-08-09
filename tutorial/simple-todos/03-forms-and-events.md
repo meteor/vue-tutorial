@@ -10,7 +10,7 @@ One of the main ways in which a user can insert or edit data in a website is thr
 
 First we need to create a simple form component to encapsulate our logic.
 
-Create a new file `TaskForm.jsx` in your `ui` folder.
+Create a new file `TaskForm.vue` in your `ui` folder.
 
 `imports/ui/TaskForm.vue`
 ```vue
