@@ -49,8 +49,8 @@ This file will export a Vue component called `Task` that will represent one task
   export default {
       props: ["task"],
       data() {
-      return {};
-  }
+          return {};
+      }
 };
 </script>
 ```
