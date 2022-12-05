@@ -9,8 +9,9 @@ Install the latest official Meteor release [following the steps in our docs](htt
 
 ## 1.2: Create Meteor Project
 
-The easiest way to setup Meteor with Vue is by using the command `meteor create` with the option `--vue` and your project name:
+The easiest way to setup Meteor with Vue is by using the command `meteor create` with the option `--vue2` and your project name:
 
+> Side note: Since meteorJS version 2.9 the default --vue will create a vue3 app, in order to follow this tutorial, use the vue2 command: ``--vue2``
 ```
 meteor create --vue2 simple-todos-vue
 ```
