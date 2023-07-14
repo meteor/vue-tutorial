@@ -1,14 +1,10 @@
+<script setup>
+import { defineProps } from 'vue'
+
+defineProps(['task'])
+</script>
+
 <template>
   <li>{{ task.text }}</li>
 </template>
 
-<script>
-import { defineProps } from 'vue'
-
-export default {
-  props: ['task'],
-  setup(props) {
-    return defineProps(props)
-  },
-}
-</script>
