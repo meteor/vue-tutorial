@@ -1,39 +1,33 @@
-<template>
-  <div class="container">
-    <header>
-      <h1>Todo List</h1>
-    </header>
-    <ul>
-      <Task
-          v-for="task in getTasks()"
-          v-bind:key="task._id"
-          v-bind:task="task"
-      />
-    </ul>
-  </div>
-</template>
-
 <script>
-import Vue from "vue";
-import Task from "./components/Task.vue";
+import Task from './components/Task.vue'
 
 export default {
   components: {
-    Task
+    Task,
   },
-  data() {
-    return {};
-  },
-  methods: {
-    getTasks() {
+  setup() {
+    function getTasks() {
       return [
-        { _id: 1, text: "This is task 1" },
-        { _id: 2, text: "This is task 2" },
-        { _id: 3, text: "This is task 3" }
-      ];
+        { _id: 1, text: 'This is task 1' },
+        { _id: 2, text: 'This is task 2' },
+        { _id: 3, text: 'This is task 3' },
+      ]
     }
-  }
-};
+
+    return {
+      getTasks,
+    }
+  },
+}
 </script>
 
-<style></style>
+<template>
+  <div class="container">
+    <header>
+      <h1 class="text-4xl font-bold text-gray-800 my-4">Todo List</h1>
+    </header>
+    <ul class="list-disc list-inside p-4">
+      <Task v-for="task in getTasks()" :key="task._id" :task="task" />
+    </ul>
+  </div>
+</template>
