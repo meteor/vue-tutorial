@@ -7,4 +7,3 @@ defineProps(['task'])
 <template>
   <li>{{ task.text }}</li>
 </template>
-
