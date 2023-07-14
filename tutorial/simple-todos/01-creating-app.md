@@ -33,7 +33,57 @@ Your Vue code will be located inside the `imports/ui` directory, and `App.vue` f
 
 Take a quick look in all the files created by Meteor, you don't need to understand them now, but it's good to know where they are.
 
-## 1.3: Clean Ui folder
+## 1.3: Install prettier and eslint
+Vue do not have native support on vscode for example. To configure Vue on your favorite IDE you'll need to install and configure prettier and eslint.
+
+To install prettier and eslint, run:
+```
+meteor npm install --save-dev prettier @prettier/plugin-php
+```
+
+```
+meteor npm install --save-dev eslint eslint-plugin-vue eslint-config-prettier eslint-plugin-prettier
+```
+
+Now, create a file called `.eslintrc.js` and paste the code bellow.
+
+`.eslintrc.js`
+```javascript
+module.exports = {
+  root: true,
+  env: {
+    browser: true,
+    node: true,
+  },
+  extends: ['eslint:recommended', 'plugin:vue/vue3-recommended', 'prettier'],
+  plugins: ['prettier'],
+  rules: {
+    'prettier/prettier': ['error'],
+    'vue/require-default-prop': 0,
+    'vue/html-indent': ['error', 2],
+    'vue/singleline-html-element-content-newline': 0,
+    'vue/component-name-in-template-casing': ['error', 'PascalCase'],
+  },
+  globals: {
+    _: true,
+  },
+}
+```
+
+And also create a file called `.prettierrc` and paste the code bellow.
+
+`.prettierrc`
+```json
+{
+  "semi": false,
+  "singleQuote": true,
+  "tabWidth": 2,
+  "printWidth": 80
+}
+```
+
+
+## 1.4: Clean Ui folder
 
 Let's delete some files that we don't need for now. Open your `imports/ui` folder and remove:
 - About.vue
@@ -78,7 +128,7 @@ Also, we need to fix the `App` component, because we're importing a component th
 </template>
 ```
 
-## 1.3: Create Task Component
+## 1.5: Create Task Component
 
 Create a new file called `Task.vue` in your `ui/components` folder.
 
@@ -100,7 +150,7 @@ defineProps(['task'])
 
 As this component will be inside a list you are returning a `li` element.
 
-## 1.4: Create Sample Tasks
+## 1.6: Create Sample Tasks
 
 As you are not connecting to your server and your database yet let's define some sample data which will be used shortly to render a list of tasks. It will be an array, and you can create a function to return this array.
 
@@ -121,7 +171,7 @@ const getTasks = () => {
 
 You can put anything as your `text` property on each task. Be creative!
 
-## 1.5: Render Sample Tasks
+## 1.7: Render Sample Tasks
 
 Now we can implement some simple rendering logic with Vue. We can now use our previous `Task` component to render our list items.
 
@@ -143,7 +193,7 @@ See below how we change the template part of the App component to add a
 
 > You can read more about Vue iterations [here](https://vuejs.org/api/built-in-directives.html#v-for).
 
-## 1.6 Mobile look
+## 1.8 Mobile look
 
 Let's see how your app is looking on Mobile. You can simulate a mobile environment `right clicking` your app in the browser (we are assuming you are using Google Chrome as it is the most popular browser today) and then `inspect`, this will open a new window inside your browser called `Dev Tools`. In the `Dev Tools` you have a small icon showing a Mobile device and a Tablet, see where this icon is:
 
