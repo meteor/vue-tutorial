@@ -208,7 +208,7 @@ Click on it and then select the phone that you want to simulate and in the top b
 
 You are going to see something like this:
 
-<img width="200px" src="/simple-todos/assets/step01-mobile.png"/>
+<img width="300px" src="/simple-todos/assets/step01-mobile.png"/>
 
 > Review: you can check how your code should be in the end of this step [here](https://github.com/meteor/vue-tutorial/tree/master/src/simple-todos/step01) 
 

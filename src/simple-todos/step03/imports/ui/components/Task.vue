@@ -1,12 +1,9 @@
-<template>
-  <li>{{ this.task.text }}</li>
-</template>
+<script setup>
+import { defineProps } from 'vue'
 
-<script>
-export default {
-  props: ["task"],
-  data() {
-    return {};
-  }
-};
+defineProps(['task'])
 </script>
+
+<template>
+  <li>{{ task.text }}</li>
+</template>
