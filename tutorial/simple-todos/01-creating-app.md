@@ -197,7 +197,7 @@ See below how we change the template part of the App component to add a
 
 Let's see how your app is looking on Mobile. You can simulate a mobile environment `right clicking` your app in the browser (we are assuming you are using Google Chrome as it is the most popular browser today) and then `inspect`, this will open a new window inside your browser called `Dev Tools`. In the `Dev Tools` you have a small icon showing a Mobile device and a Tablet, see where this icon is:
 
-<img width="500px" src="/simple-todos/assets/step01-dev-tools-mobile-button.png"/>
+<img class="step-images" src="/simple-todos/assets/step01-dev-tools-mobile-button.png"/>
 
 Click on it and then select the phone that you want to simulate and in the top bar.
 
@@ -208,7 +208,7 @@ Click on it and then select the phone that you want to simulate and in the top b
 
 You are going to see something like this:
 
-<img width="300px" src="/simple-todos/assets/step01-mobile.png"/>
+<img class="step-images" src="/simple-todos/assets/step01-mobile.png"/>
 
 > Review: you can check how your code should be in the end of this step [here](https://github.com/meteor/vue-tutorial/tree/master/src/simple-todos/step01) 
 
