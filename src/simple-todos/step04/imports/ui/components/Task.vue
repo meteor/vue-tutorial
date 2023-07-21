@@ -1,40 +1,40 @@
-<template>
-  <li v-bind:class="taskClassName">
-    <input
-      type="checkbox"
-      readOnly
-      v-bind:checked="!!this.task.isChecked"
-      @click="toggleChecked"
-    />
-    <span class="text">{{ this.task.text }}</span>
-    <button class="delete" @click="deleteThisTask">
-      ×
-    </button>
-  </li>
-</template>
+<script setup>
+import { defineProps, ref, watch } from 'vue';
+import { TasksCollection } from '../../api/TasksCollection';
 
-<script>
-import { TasksCollection } from "../../api/TasksCollection";
-export default {
-  props: ["task"],
-  data() {
-    return {};
+const props = defineProps({
+  task: Object
+});
+
+const taskRef = ref(props.task);
+
+const deleteTask = () => {
+  TasksCollection.remove(taskRef.value._id);
+}
+
+watch(
+  () => taskRef.value.checked,
+  (newCheckedValue) => {
+    TasksCollection.update(taskRef.value._id, {
+      $set: {
+        checked: newCheckedValue
+      }
+    });
   },
-  computed: {
-    taskClassName: function() {
-      return this.task.isChecked ? "checked" : "";
-    }
-  },
-  methods: {
-    toggleChecked() {
-      // Set the checked property to the opposite of its current value
-      TasksCollection.update(this.task._id, {
-        $set: { isChecked: !this.task.isChecked }
-      });
-    },
-    deleteThisTask() {
-      TasksCollection.remove(this.task._id);
-    }
-  }
-};
+  { immediate: true }
+);
 </script>
+
+<template>
+  <div class="flex items-center rounded px-4 py-2 mb-2">
+    <li>
+      <input type="checkbox" readonly :checked="taskRef.checked" v-model="taskRef.checked" />
+    </li>
+    <span class="text-gray-600 pl-2" :class="{ 'text-gray-400 italic line-through': taskRef.checked }">
+      {{ task.text }}
+    </span>
+    <button class="ml-auto bg-red-500 hover:bg-red-600 text-white font-bold py-0.5 px-2 rounded" @click="deleteTask">
+      x
+    </button>
+  </div>
+</template>
