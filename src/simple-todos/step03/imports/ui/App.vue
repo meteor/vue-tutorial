@@ -1,40 +1,21 @@
+<script setup>
+import Task from './components/Task.vue'
+import TaskForm from './components/TaskForm.vue';
+import { subscribe, autorun } from 'vue-meteor-tracker'
+import { TasksCollection } from '../api/TasksCollection'
+
+subscribe('tasks')
+const tasks = autorun(() => TasksCollection.find({}, { sort: { createdAt: -1 } }).fetch()).result
+</script>
+
 <template>
   <div class="container">
     <header>
-      <h1>Todo List</h1>
+      <h1 class="text-4xl font-bold text-gray-800 my-4">Todo List</h1>
     </header>
     <TaskForm />
-    <ul>
-      <Task
-          v-for="task in tasks"
-          v-bind:key="task._id"
-          v-bind:task="task"
-      />
+    <ul class="list-disc list-inside p-4">
+      <Task v-for="task of tasks" :key="task._id" :task="task" />
     </ul>
   </div>
 </template>
-
-<script>
-import Vue from "vue";
-import Task from "./components/Task.vue";
-import TaskForm from "./components/TaskForm.vue";
-import { TasksCollection } from "../api/TasksCollection";
-
-export default {
-  components: {
-    Task,
-    TaskForm
-  },
-  data() {
-    return {};
-  },
-  methods: {},
-  meteor: {
-    tasks() {
-      return TasksCollection.find({}, { sort: { createdAt: -1 } }).fetch();
-    }
-  }
-};
-</script>
-
-<style></style>
