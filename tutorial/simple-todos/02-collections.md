@@ -29,7 +29,7 @@ You can delete the `links.js` file in this folder as we are not going to use thi
 
 For our collection to work you need to import it in the server so it sets some plumbing up. 
 
-You can either use `import "/imports/api/TasksCollection"` or `import { TasksCollection } from "/imports/api/TasksCollection"` if you are going to use on the same file, but make sure it is imported.
+You can either use `import "./imports/api/TasksCollection"` or `import { TasksCollection } from "./imports/api/TasksCollection"` if you are going to use on the same file, but make sure it is imported.
 
 Now it is easy to check if there is data or not in our collection, otherwise we can insert some sample data easily as well.
 
@@ -38,7 +38,7 @@ You don't need to keep the old content of `server/main.js`.
 `server/main.js`
 ```js
 import { Meteor } from 'meteor/meteor';
-import { TasksCollection } from '/imports/api/TasksCollection';
+import { TasksCollection } from '../imports/api/TasksCollection';
 
 const insertTask = taskText => TasksCollection.insert({ text: taskText });
  
@@ -71,53 +71,29 @@ Now you are ready to import code from this package.
 
 > When importing code from a Meteor package the only difference from NPM modules is that you need to prepend `meteor/` in the from part of your import.
 
-First we need to add the `VueMeteorTracker` to the root Vue instance:
+First we need to implement a subscription at the `App` component to get the tasks updated from the server. It can be done simply by using the `subscribe` and `autorun` function from `vue-meteor-tracker`.
 
-`client/main.js`
-```javascript
-import VueMeteorTracker from 'vue-meteor-tracker';
-
-Vue.use(VueMeteorTracker);
-```
-
-Then we need to modify the `App` component to get tasks from collection:
 `imports/ui/App.vue`
-```vue
+```javascript
+<script setup>
+import Task from './components/Task.vue'
+import { subscribe, autorun } from 'vue-meteor-tracker'
+import { TasksCollection } from '../api/TasksCollection'
+
+subscribe('tasks')
+const tasks = autorun(() => TasksCollection.find({}).fetch()).result
+</script>
+
 <template>
   <div class="container">
     <header>
-      <h1>Todo List</h1>
+      <h1 class="text-4xl font-bold text-gray-800 my-4">Todo List</h1>
     </header>
-    <ul>
-      <Task
-          v-for="task in tasks"
-          v-bind:key="task._id"
-          v-bind:task="task"
-      />
+    <ul class="list-disc list-inside p-4">
+      <Task v-for="task of tasks" :key="task._id" :task="task" />
     </ul>
   </div>
 </template>
-
-<script>
-import Vue from "vue";
-import Task from "./components/Task.vue";
-import { TasksCollection } from "../api/TasksCollection";
-
-export default {
-  components: {
-    Task
-  },
-  data() {
-    return {};
-  },
-  methods: {},
-  meteor: {
-    tasks() {
-      return TasksCollection.find({}).fetch();
-    }
-  }
-};
-</script>
 ```
 
 Meteor skeletons are secure by default, but that is not what we want right now, so let's add `autopublish` package so that we can more easily prototype with out data:
@@ -129,7 +105,7 @@ This is only for prototyping and is not something to do in any application that 
 
 See how your app should look like now:
 
-<img width="200px" src="/simple-todos/assets/step02-tasks-list.png"/>
+<img class="step-images" src="/simple-todos/assets/step02-task-list.png"/>
 
 You can change your data on MongoDB in the server and your app will react and re-render for you.
 
@@ -137,15 +113,15 @@ You can connect to your MongoDB running `meteor mongo` in the terminal from your
 
 See how to connect:
 
-<img width="500px" src="/simple-todos/assets/step02-connect-mongo.png"/>
+<img class="step-images" src="/simple-todos/assets/new-screenshots/step02/nosql-new-connection.png"/>
 
 See your database:
 
-<img width="500px" src="/simple-todos/assets/step02-see-your-db.png"/>
+<img class="step-images" src="/simple-todos/assets/new-screenshots/step02/nosql-connection-editor.png"/>
 
 You can double-click your collection to see the documents stored on it:
 
-<img width="500px" src="/simple-todos/assets/step02-see-your-collection.png"/>
+<img class="step-images" src="/simple-todos/assets/new-screenshots/step02/nosql-tasks-query.png"/>
 
 
 But wait, how my tasks are coming from the server to the client? We are going to explain this later, in the step about Publications and Subscriptons. What you need to know now is that you are publishing all the data from the database to the client. This will be removed later as we don't want to publish all the data all the time.
