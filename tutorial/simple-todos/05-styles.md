@@ -2,179 +2,69 @@
 title: '5: Styles'
 ---
 
-## 5.1: CSS
+## 5.1: Tailwind CSS
 
 Our user interface up until this point has looked quite ugly. Let's add some basic styling which will serve as the foundation for a more professional looking app.
 
-Replace the content of our `client/main.css` file with the one below, the idea is to have an app bar in the top, and a scrollable content including:
+Lets starting at App.vue:
 
-- form to add new tasks;
-- list of tasks.
-
-`client/main.css`
-```css
-body {
-  font-family: sans-serif;
-  background-color: #315481;
-  background-image: linear-gradient(to bottom, #315481, #918e82 100%);
-  background-attachment: fixed;
-
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-
-  padding: 0;
-  margin: 0;
-
-  font-size: 14px;
-}
-
-button {
-  font-weight: bold;
-  font-size: 1em;
-  border: none;
-  color: white;
-  box-shadow: 0 3px 3px rgba(34, 25, 25, 0.4);
-  padding: 5px;
-  cursor: pointer;
-}
-
-button:focus {
-  outline: 0;
-}
-
-.app {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-}
-
-.app-header {
-  flex-grow: 1;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.main {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  overflow: auto;
-  background: white;
-}
-
-.main::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-  background: inherit;
-}
-
-header {
-  background: #d2edf4;
-  background-image: linear-gradient(to bottom, #d0edf5, #e1e5f0 100%);
-  padding: 20px 15px 15px 15px;
-  position: relative;
-  box-shadow: 0 3px 3px rgba(34, 25, 25, 0.4);
-}
-
-.app-bar {
-  display: flex;
-  justify-content: space-between;
-}
-
-.app-bar h1 {
-  font-size: 1.5em;
-  margin: 0 1em 0 0;
-  display: inline-block;
-}
-
-.task-form {
-  display: flex;
-  margin: 16px;
-}
-
-.task-form > input {
-  flex-grow: 1;
-  box-sizing: border-box;
-  padding: 10px 6px;
-  background: transparent;
-  border: 1px solid #aaa;
-  width: 100%;
-  font-size: 1em;
-  margin-right: 16px;
-}
-
-.task-form > input:focus {
-  outline: 0;
-}
-
-.task-form > button {
-  min-width: 100px;
-  height: 95%;
-  background-color: #315481;
-}
-
-.tasks {
-  list-style-type: none;
-  padding-inline-start: 0;
-  padding-left: 16px;
-  padding-right: 16px;
-  margin-block-start: 0;
-  margin-block-end: 0;
-}
-
-.task {
-  display: flex;
-  padding: 16px;
-  border-bottom: #eee solid 1px;
-}
-
-.task > span {
-  flex-grow: 1;
-}
-
-.task > button {
-  justify-self: flex-end;
-  background-color: #ff3046;
-}
+`imports/ui/App.vue`
+```javascript
+<template>
+  <header class="flex items-center justify-between px-4 py-4 bg-gray-100 border-t border-b border-gray-200">
+    <h1 class="text-4xl font-bold text-gray-800 my-4">Todo List</h1>
+  </header>
+  <div class="mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:px-8">
+    <div class="mb-8 md:w-96 md:mx-auto md:mb-0 md:mt-8 md:px-4 md:py-8 text-center md:bg-gray-100 md:rounded-lg">
+      <TaskForm />
+      <ul class="list-none list-inside pr-4 pt-4 md:w-96">
+        <Task v-for="task of tasks" :key="task._id" :task="task" />
+      </ul>
+    </div>
+  </div>
+</template>
 ```
 
 > If you want to learn more about this stylesheet check this article about [Flexbox](https://css-tricks.com/snippets/css/a-guide-to-flexbox/), and also this free [video tutorial](https://flexbox.io/) about it from [Wes Bos](https://twitter.com/wesbos).
 >
 > Flexbox is an excellent tool to distribute and align elements in your UI.
+> Also check this [article](https://tailwindcss.com/docs/) about [Tailwind CSS](https://tailwindcss.com/), the CSS framework we are using in this tutorial.
 
-## 5.2: Applying styles
+We'll also update the TaskForm.vue component:
 
-Now you need to add some elements around your components. You are going to add a `className` to your main div in the `App`, also a `header` element with a few `divs` around your `h1`, and a main `div` around your form and list. Check below how it should be, pay attention to the name of the classes, they need to be the same as in the CSS file:
-
-`imports/ui/App.vue`
-```vue
+`imports/ui/components/TaskForm.vue`
+```javascript
 <template>
-  <div class="app">
-    <header>
-      <div className="app-bar">
-        <div className="app-header">
-          <h1>Todo List</h1>
-        </div>
-      </div>
-    </header>
-    <div class="main">
-      <TaskForm />
-      <ul class="tasks">
-        <Task
-            class="task"
-            v-for="task in tasks"
-            v-bind:key="task._id"
-            v-bind:task="task"
-        />
-      </ul>
-    </div>
-  </div>
+    <form @submit.prevent="addTask">
+        <input
+            class=" border border-gray-300 rounded-md py-2 px-4 mr-2 text-gray-600 text-sm focus:outline-none focus:border-gray-400 focus:ring-0"
+            type="text" v-model="newTask" placeholder="Type to add new tasks" />
+        <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1.5 px-4 rounded" type="submit">Add
+            Task</button>
+    </form>
 </template>
 ..
+```
+
+And, Task.vue:
+
+`imports/ui/components/Task.vue`
+```javascript
+<template>
+  <div class="flex items-center rounded mr-4 p-4 py-2 mb-2 
+    shadow-sm border border-gray-200
+  ">
+    <li>
+      <input type="checkbox" readonly :checked="taskRef.checked" v-model="taskRef.checked" />
+    </li>
+    <span class="text-gray-600 pl-2" :class="{ 'text-gray-400 italic line-through': taskRef.checked }">
+      {{ task.text }}
+    </span>
+    <button class="ml-auto bg-red-500 hover:bg-red-600 text-white font-bold py-0.5 px-2 rounded" @click="deleteTask">
+      x
+    </button>
+  </div>
+</template>
 ```
 
 Also choose a better title for your app, Meteor is amazing, but you don't want to see `Todo List` in your app top bar all the time.
@@ -183,15 +73,17 @@ You could choose something like:
 
 `imports/ui/App.jsx`
 
-```js
-  ..
-  <h1>📝️ To Do List</h1>
-  ..
+```javascript
+  ...
+
+  <h1 class="text-4xl font-bold text-gray-800 my-4">🚀 To-Do List</h1>
+  
+  ...
 ```
 
 Your app should look like this:
 
-<img width="200px" src="/simple-todos/assets/step05-styles.png"/>
+<img class="step-images" src="/simple-todos/assets/new-screenshots/step05/new-ui.png"/>
 
 > Review: you can check how your code should be in the end of this step [here](https://github.com/meteor/vue-tutorial/tree/master/src/simple-todos/step05) 
 
