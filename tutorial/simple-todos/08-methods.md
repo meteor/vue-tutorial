@@ -14,7 +14,7 @@ Meteor Method is a way to communicate with your server using the function `Meteo
 
 ## 8.1: Disable Quick Prototyping
 
-Every newly created Meteor project has the `insecure` package installed by default.
+Some newly created Meteor project has the `insecure` package installed by default. In our case, we added it in the beginning of the tutorial, and now we need to remove it.
 
 This package allows us to edit the database from the client as we said above, which is useful for quick prototyping.
 
@@ -52,49 +52,49 @@ Now you should add a new file called `tasksMethods` in your `imports/api` folder
 Inside Methods you have a few special properties ready to be used on `this` object, for example you have the `userId` of the authenticated user.
 
 `imports/api/tasksMethods.js`
-```js
+```javascript
 import { check } from 'meteor/check';
-import { TasksCollection } from './TasksCollection';
- 
+import { TasksCollection } from '../db/TasksCollection';
+
 Meteor.methods({
-  'tasks.insert'(text) {
-    check(text, String);
- 
-    if (!this.userId) {
-      throw new Meteor.Error('Not authorized.');
+    'tasks.insert'(text) {
+        check(text, String);
+
+        if (!this.userId) {
+            throw new Meteor.Error('Not authorized.');
+        }
+
+        TasksCollection.insert({
+            text,
+            createdAt: new Date,
+            userId: this.userId,
+        })
+    },
+
+    'tasks.remove'(taskId) {
+        check(taskId, String);
+
+        if (!this.userId) {
+            throw new Meteor.Error('Not authorized.');
+        }
+
+        TasksCollection.remove(taskId);
+    },
+
+    'tasks.setIsChecked'(taskId, checked) {
+        check(taskId, String);
+        check(checked, Boolean);
+
+        if (!this.userId) {
+            throw new Meteor.Error('Not authorized.');
+        }
+
+        TasksCollection.update(taskId, {
+            $set: {
+                checked
+            }
+        });
     }
- 
-    TasksCollection.insert({
-      text,
-      createdAt: new Date,
-      userId: this.userId,
-    })
-  },
- 
-  'tasks.remove'(taskId) {
-    check(taskId, String);
- 
-    if (!this.userId) {
-      throw new Meteor.Error('Not authorized.');
-    }
- 
-    TasksCollection.remove(taskId);
-  },
- 
-  'tasks.setIsChecked'(taskId, isChecked) {
-    check(taskId, String);
-    check(isChecked, Boolean);
- 
-    if (!this.userId) {
-      throw new Meteor.Error('Not authorized.');
-    }
- 
-    TasksCollection.update(taskId, {
-      $set: {
-        isChecked
-      }
-    });
-  }
 });
 ```
 
@@ -103,11 +103,11 @@ As you can see in the code we are also using the `check` package to make sure we
 The last part is to make sure your server is registering these methods, you can do this importing this file, to force the evaluation, in the `server/main.js`.
 
 `server/main.js`
-```js
+```javascript
 import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
-import { TasksCollection } from '/imports/db/TasksCollection';
-import './imports/api/tasksMethods';
+import { TasksCollection } from '../imports/api/TasksCollection'
+import "../imports/api/tasksMethods"
 ```
 
 See that you don't need to get any symbol back from the import, you only need to ask for your server to import the file then `Meteor.methods` will be evaluated and will register your methods on server startup.
@@ -119,45 +119,46 @@ As you have defined your methods, you need to update the places we were operatin
 In the `TaskForm` file you should call `Meteor.call('tasks.insert', text);` instead of `TasksCollection.insert`. Remember to fix your imports as well.
 
 `imports/ui/components/TaskForm.vue`
-```vue
-..
-<script>
-  import { Meteor } from 'meteor/meteor';
-  ..
-  methods: {
-    handleSubmit(event) {
-      if (this.newTask.length === 0) return;
+```javascript
+<script setup>
+import { Meteor } from 'meteor/meteor'
+import { ref } from 'vue'
 
-      Meteor.call('tasks.insert', this.newTask.trim());
+const newTask = ref('')
 
-      // Clear form
-      this.newTask = "";
-    }
-  },
+const addTask = () => {
+    Meteor.call('tasks.insert', newTask.value.trim())
+    newTask.value = ''
 }
 </script>
 ```
 
 See that your `TaskForm` component does not need to receive the user anymore as we get the `userId` in the server.
 
-In the `Task` component you should call `Meteor.call('tasks.setIsChecked', _id, !isChecked);` instead of `TasksCollection.update` and `Meteor.call('tasks.remove', _id)` instead of `TasksCollection.remove`.
+In the `Task` component you should call `Meteor.call('tasks.setIsChecked', _id, newCheckedValue);` instead of `TasksCollection.update` and `Meteor.call('tasks.remove', _id)` instead of `TasksCollection.remove`.
 
 Remember to also remove the user property from your `<TaskForm />`
 
 `imports/ui/components/Task.vue`
-```vue
-..
-methods: {
-    toggleChecked() {
-      // Set the checked property to the opposite of its current value
-      Meteor.call('tasks.setIsChecked', this.task._id, !this.task.isChecked);
-    },
-    deleteThisTask() {
-      Meteor.call('tasks.remove', this.task._id);
-    }
+```javascript
+...
+
+const deleteTask = () => {
+  Meteor.call('tasks.remove', taskRef.value._id);
 }
-..
+
+watch(
+  () => !!taskRef.value.checked,
+  (newCheckedValue) => {
+    Meteor.call('tasks.setIsChecked', taskRef.value._id, newCheckedValue);
+  },
+  { immediate: true }
+);
+
+...
 ```
+
+Don't forget to add the `!!` to convert the value to a boolean. Also, you need to import `Meteor`.
 
 Now your inputs and buttons will start working again. What you gained?
 
@@ -171,8 +172,9 @@ We would like to take a moment here to think, the folder where the collection fi
 
 This change is not required, but it's recommended to keep our names consistent with the reality.
 
-Remember to fix your imports, you have 3 imports to `TasksCollection` in the following files:
-- `imports/api/tasksMethods.js`
+Remember to fix your imports, you have 4 imports to `TasksCollection` in the following files:
+- `imports/ui/App.vue`
+- `imports/ui/components/Task.vue`
 - `imports/ui/components/TaskForm.vue`
 - `server/main.js`
 
