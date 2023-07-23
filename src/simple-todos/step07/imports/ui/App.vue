@@ -24,13 +24,8 @@ watch(
 
 subscribe('tasks')
 const tasks = autorun(() => {
-  const hideCompletedFilter = { checked: { $ne: true } }
-  const userFilter = user.value ? { userId: user.value } : {}
-
-  const pendingOnlyFilter = { ...hideCompletedFilter, ...userFilter }
-
   return TasksCollection.find(
-    hideCompleted ? pendingOnlyFilter : userFilter,
+    hideCompleted.value ? { checked: { $ne: true } } : {},
     {
       sort: { createdAt: -1 },
     }

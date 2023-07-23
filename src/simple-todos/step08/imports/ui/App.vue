@@ -6,7 +6,7 @@ import Task from './components/Task.vue'
 import TaskForm from './components/TaskForm.vue';
 import LoginForm from './components/LoginForm.vue';
 import { subscribe, autorun } from 'vue-meteor-tracker'
-import { TasksCollection } from '../api/TasksCollection'
+import { TasksCollection } from '../db/TasksCollection'
 
 const hideCompleted = ref(false)
 const isLogged = ref(false)
@@ -24,13 +24,8 @@ watch(
 
 subscribe('tasks')
 const tasks = autorun(() => {
-  const hideCompletedFilter = { checked: { $ne: true } }
-  const userFilter = user.value ? { userId: user.value } : {}
-
-  const pendingOnlyFilter = { ...hideCompletedFilter, ...userFilter }
-
   return TasksCollection.find(
-    hideCompleted ? pendingOnlyFilter : userFilter,
+    hideCompleted.value ? { checked: { $ne: true } } : {},
     {
       sort: { createdAt: -1 },
     }

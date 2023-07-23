@@ -1,19 +1,11 @@
 <script setup>
 import { Meteor } from 'meteor/meteor'
 import { ref } from 'vue'
-import { TasksCollection } from '../../api/TasksCollection';
 
 const newTask = ref('')
 
-const user = Meteor.user()
-
 const addTask = () => {
-    TasksCollection.insert({
-        text: newTask.value.trim(),
-        createdAt: new Date(),
-        userId: user._id
-    })
-
+    Meteor.call('tasks.insert', newTask.value.trim())
     newTask.value = ''
 }
 </script>

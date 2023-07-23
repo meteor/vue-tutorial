@@ -1,6 +1,6 @@
 <script setup>
 import { defineProps, ref, watch } from 'vue';
-import { TasksCollection } from '../../api/TasksCollection';
+import { Meteor } from 'meteor/meteor';
 
 const props = defineProps({
   task: Object
@@ -9,17 +9,13 @@ const props = defineProps({
 const taskRef = ref(props.task);
 
 const deleteTask = () => {
-  TasksCollection.remove(taskRef.value._id);
+  Meteor.call('tasks.remove', taskRef.value._id);
 }
 
 watch(
-  () => taskRef.value.checked,
+  () => !!taskRef.value.checked,
   (newCheckedValue) => {
-    TasksCollection.update(taskRef.value._id, {
-      $set: {
-        checked: newCheckedValue
-      }
-    });
+    Meteor.call('tasks.setIsChecked', taskRef.value._id, newCheckedValue);
   },
   { immediate: true }
 );
