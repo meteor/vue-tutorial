@@ -25,12 +25,12 @@ meteor npm install --save bcrypt
 Now you can create a default user for our app, we are going to use `meteorite` as username, we just create a new user on server startup if we didn't find it in the database.
 
 `server/main.js`
-```js
-import { Meteor } from 'meteor/meteor';
-import { Accounts } from 'meteor/accounts-base';
-import { TasksCollection } from '/imports/api/TasksCollection';
+```javascript
+import { Meteor } from 'meteor/meteor'
+import { Accounts } from 'meteor/accounts-base'
+import { TasksCollection } from '../imports/api/TasksCollection'
 
-..
+...
 
 const SEED_USERNAME = 'meteorite';
 const SEED_PASSWORD = 'password';
@@ -42,7 +42,8 @@ Meteor.startup(() => {
       password: SEED_PASSWORD,
     });
   }
-  ..
+
+  ...
 });
 ```
 
@@ -55,57 +56,42 @@ You need to provide a way for the users to input the credentials and authenticat
 Create a new file called `LoginForm.vue` and add a form to it. You should use `Meteor.loginWithPassword(username, password);` to authenticate your user with the provided inputs.
 
 `imports/ui/components/LoginForm.vue`
-```vue
-<template>
-  <form class="login-form" @submit.prevent="handleSubmit">
-    <div>
-      <label for="username">Username</label>
-      <input
-          id="username"
-          name="username"
-          type="text"
-          placeholder="Username"
-          required
-          v-model="username"
-      />
-    </div>
+```javascript
+<script setup>
+import { Meteor } from 'meteor/meteor'
+import { ref } from 'vue'
 
-    <div>
-      <label for="password">Password</label>
-      <input
-          id="password"
-          name="password"
-          type="password"
-          placeholder="Password"
-          required
-          v-model="password"
-      />
-    </div>
+const username = ref('')
+const password = ref('')
 
-    <div>
-      <button type="submit">Log In</button>
-    </div>
-  </form>
-</template>
-
-<script>
-import { Meteor } from 'meteor/meteor';
-
-export default {
-  name: "LoginForm",
-  data() {
-    return {
-      username: "",
-      password: ""
-    };
-  },
-  methods: {
-    handleSubmit(event) {
-      Meteor.loginWithPassword(this.username, this.password);
-    }
-  },
+const submitForm = (event) => {
+    event.preventDefault()
+    Meteor.loginWithPassword(username.value, password.value)
 }
 </script>
+
+<template>
+    <form @submit="submitForm " class="flex flex-col justify-center items-center w-full max-w-md mx-auto my-8">
+        <div>
+            <label for="username" class="block text-gray-700 text-sm font-bold mb-2">Username</label>
+            <input type="text" name="username" placeholder="Username" required v-model="username"
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </div>
+
+        <div class="mt-4">
+            <label for="password" class="block text-gray-700 text-sm font-bold mb-2">Password</label>
+            <input type="password" name="password" placeholder="Password" required v-model="password"
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </div>
+
+        <div>
+            <button type="submit"
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 mt-4 px-4 rounded focus:outline-none focus:shadow-outline">
+                Log in
+            </button>
+        </div>
+    </form>
+</template>
 ```
 
 Ok, now you have a form, let's use it.
@@ -116,103 +102,64 @@ Our app should only allow an authenticated user to access its task management fe
 
 We can accomplish that returning the `LoginForm` component when we don't have an authenticated user, otherwise we return the form, filter, and list component.
 
-Modify the data container to get information about the currently logged in user:
+We'll need a `ref`, that will be used to know if the user is logged in or not, a `user` variable that will be used to store the user data, and a logic using `watch` to update the `isLogged` ref when the user changes.
 
 `imports/ui/App.vue`
-```vue
-..
-incompleteCount() {
-  return TasksCollection.find({ checked: { $ne: true } }).count();
-},
-currentUser() {
-  return Meteor.user();
-}
-..
+```javascript
+...
+
+const hideCompleted = ref(false)
+const isLogged = ref(false)
+
+const user = autorun(() => Meteor.userId()).result
+
+watch(
+  () => user.value,
+  (newUser) => {
+    isLogged.value = !!newUser
+  },
+  { immediate: true }
+)
+
+...
 ```
 
-Then, we can wrap our user functionality in a `<template>` tag and add in the `v-if` directive to conditionally render our user functionality when there is a logged in user:
+Then, we can wrap our user functionality in a `<div>` tag and add in the `v-if` directive to conditionally render our user functionality when there is a logged in user:
 
 `imports/ui/App.vue`
-```vue
-..
-<div class="main">
-  <template v-if="currentUser">
-    <TaskForm />
-    <div class="filter">
-      <button
-          v-model="hideCompleted"
-          @click="toggleHideCompleted"
-      >
-        <span v-if="hideCompleted">Show All</span>
-        <span v-else>Hide Completed Tasks</span>
-      </button>
+```javascript
+...
+
+<template>
+  <div v-if="isLogged">
+    <header class="flex items-center justify-between px-4 py-4 bg-gray-100 border-t border-b border-gray-200">
+      <h1 class="text-4xl font-bold text-gray-800 my-4">🚀 To-Do List
+        <span v-if="incompleteTasksCount > 0" class="text-sm font-light text-gray-600">({{ incompleteTasksCount }})</span>
+      </h1>
+    </header>
+    <div class="mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:px-8">
+      <div class="mb-8 md:w-96 md:mx-auto md:mb-0 md:mt-8 md:px-4 md:py-8 text-center md:bg-gray-100 md:rounded-lg">
+        <TaskForm />
+        <div>
+          <button class="text-sm font-semibold text-gray-600 hover:text-gray-800" @click="toggleHideCompleted">
+            <span v-if="hideCompleted">Show all</span>
+            <span v-else>Hide completed</span>
+          </button>
+        </div>
+        <ul class="list-none list-inside pr-4 pt-4 md:w-96">
+          <Task v-for="task of tasks" :key="task._id" :task="task" />
+        </ul>
+      </div>
     </div>
-    <ul class="tasks">
-      <Task
-          class="task"
-          v-for="task in tasks"
-          v-bind:key="task._id"
-          v-bind:task="task"
-      />
-    </ul>
-  </template>
-  <template v-else>
+  </div>
+
+  <div v-else>
     <LoginForm />
-  </template>
-</div>
-..
+  </div>
+</template>
 ```
 
-
-## 7.5: Login Form style
-
-Ok, let's style the login form now:
-
-Wrap your pairs of label and input in `div`s so it will easier to control it on CSS.
-
-`client/main.css`
-```css
-.login-form {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-
-  justify-content: center;
-  align-items: center;
-}
-
-.login-form > div {
-  margin: 8px;
-}
-
-.login-form > div > label {
-  font-weight: bold;
-}
-
-.login-form > div  > input {
-  flex-grow: 1;
-  box-sizing: border-box;
-  padding: 10px 6px;
-  background: transparent;
-  border: 1px solid #aaa;
-  width: 100%;
-  font-size: 1em;
-  margin-right: 16px;
-  margin-top: 4px;
-}
-
-.login-form > div > input:focus {
-  outline: 0;
-}
-
-.login-form > div > button {
-  background-color: #62807e;
-}
-```
-
-Now your login form should be centralized and beautiful.
-
-## 7.6: Server startup
+## 7.5: Server startup
 
 Every task should have an owner from now on. So go to your database, as you learn before, and remove all the tasks from there:
 
@@ -223,10 +170,10 @@ Change your `server/main.js` to add the seed tasks using your `meteoriote` user 
 Make sure you restart the server after this change so `Meteor.startup` block will run again. This is probably going to happen automatically any way as you are going to make changes in the server side code.
 
 `server/main.js`
-```js
-import { Meteor } from 'meteor/meteor';
-import { Accounts } from 'meteor/accounts-base';
-import { TasksCollection } from '/imports/api/TasksCollection';
+```javascript
+import { Meteor } from 'meteor/meteor'
+import { Accounts } from 'meteor/accounts-base'
+import { TasksCollection } from '../imports/api/TasksCollection'
 
 const insertTask = (taskText, user) =>
   TasksCollection.insert({
@@ -268,113 +215,122 @@ See that we are using a new field called `userId` with our user `_id` field, we 
 
 Now you can filter the tasks in the UI by the authenticated user. Use the user `_id` to add the field `userId` to your Mongo selector when getting the tasks from Mini Mongo.
 
+Your ´tasks´ function should look like this:
+
 `imports/ui/App.vue`
-```vue
-..
-meteor: {
-    tasks() {
-      if (!this.currentUser) {
-        return [];
-      }
-    
-        const hideCompletedFilter = { isChecked: { $ne: true } };
-        
-        const userFilter = this.currentUser ? { userId: this.currentUser._id } : {};
-        
-        const pendingOnlyFilter = { ...hideCompletedFilter, ...userFilter };
-        
-        return TasksCollection.find(
-          this.hideCompleted ? pendingOnlyFilter : userFilter,
-          {
-            sort: { createdAt: -1 },
-          }
-        ).fetch();
-    },
-    incompleteCount() {
-      return TasksCollection.find({ isChecked: { $ne: true }, userId: this.currentUser._id }).count();
-    },
-    currentUser() {
-      return Meteor.user();
+```javascript
+...
+
+<script setup>
+import { Meteor } from 'meteor/meteor'
+
+import { ref, watch } from 'vue'
+import Task from './components/Task.vue'
+import TaskForm from './components/TaskForm.vue';
+import LoginForm from './components/LoginForm.vue';
+import { subscribe, autorun } from 'vue-meteor-tracker'
+import { TasksCollection } from '../api/TasksCollection'
+
+const hideCompleted = ref(false)
+const isLogged = ref(false)
+
+const user = autorun(() => Meteor.userId()).result
+const logout = () => Meteor.logout()
+
+watch(
+  () => user.value,
+  (newUser) => {
+    isLogged.value = !!newUser
+  },
+  { immediate: true }
+)
+
+subscribe('tasks')
+const tasks = autorun(() => {
+  const hideCompletedFilter = { checked: { $ne: true } }
+  const userFilter = user.value ? { userId: user.value } : {}
+
+  const pendingOnlyFilter = { ...hideCompletedFilter, ...userFilter }
+
+  return TasksCollection.find(
+    hideCompleted ? pendingOnlyFilter : userFilter,
+    {
+      sort: { createdAt: -1 },
     }
+  ).fetch()
+}).result
+
+const incompleteTasksCount = autorun(() => {
+  return TasksCollection.find({ checked: { $ne: true } }).count()
+}).result
+
+const toggleHideCompleted = () => {
+  hideCompleted.value = !hideCompleted.value
 }
-..
+
+</script>
+...
 ```
 
 Also update the `insert` call to include the field `userId` in the `TaskForm`. You should pass the user from the `App` component to the `TaskForm`.
 
 `imports/ui/components/TaskForm.vue`
-```vue
-..
-methods: {
-  handleSubmit(event) {
+```javascript
+...
 
-    if (this.newTask.length === 0) return;
+const newTask = ref('')
 
-    const user = Meteor.user()
+const user = Meteor.user()
 
+const addTask = () => {
     TasksCollection.insert({
-      text: this.newTask.trim(),
-      createdAt: new Date(), // current time
-      userId: user._id
-    });
+        text: newTask.value.trim(),
+        createdAt: new Date(),
+        userId: user._id
+    })
 
-    // Clear form
-    this.newTask = "";
-  }
-},
-..
+    newTask.value = ''
+}
+
+...
 ```
 
 ## 7.8: Log out
 
-We also can better organize our tasks by showing the username of the owner below our app bar. You can include a new `div` right after our `template` start tag.
+We also can better organize our tasks by showing the username of the owner below our app bar. You can include a new `button` right after our `h1`.
 
 On this you can add an `onClick` handler to logout the user as well. It is very straightforward, just call `Meteor.logout()` on it.
 
 `imports/ui/App.vue`
+```javascript
+...
 
-```vue
-..
-  const logout = () => Meteor.logout();
+const user = autorun(() => Meteor.userId()).result
+const logout = () => Meteor.logout()
 
-  return (
-..
-    <template v-if="currentUser">
-      <div class="user" v-on:click="logout">
-        {{currentUser.username}} 🚪
-      </div>
-      <TaskForm />
-..
-      methods: {
-          toggleHideCompleted() {
-            this.hideCompleted = !this.hideCompleted;
-          },
-          logout() {
-            Meteor.logout();
-          }
-      },
-..
-```
+...
 
-Remember to style your username as well.
+<h1 class="text-4xl font-bold text-gray-800 my-4">🚀 To-Do List
+  <span v-if="incompleteTasksCount > 0" class="text-sm font-light text-gray-600">({{ incompleteTasksCount }})</span>
+</h1>
 
-`client/main.css`
-```css
-.user {
-  display: flex;
-  cursor: pointer;
-  align-self: flex-end;
-  margin: 8px 16px 0;
-  font-weight: bold;
-}
+<button
+  class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+  @click="logout">
+      Logout
+</button>
+
+...
 ```
 
 Phew! You have done quite a lot in this step. Authenticated the user, set the user in the tasks and provided a way for the user to log out.
 
 Your app should look like this:
 
-<img width="200px" src="/simple-todos/assets/step07-login.png"/>
-<img width="200px" src="/simple-todos/assets/step07-logout.png"/>
+<img class="step-images" src="/simple-todos/assets/new-screenshots/step07/login-page.png"/>
+<img class="step-images" src="/simple-todos/assets/new-screenshots/step07/logged-page.png"/>
+
+At this point you probably can try to explore more the app and add a register form by your own. You already know how to menage refs, insert datas, and create components. But feel free to just keep following the tutorial and add the register form later.
 
 > Review: you can check how your code should be in the end of this step [here](https://github.com/meteor/vue-tutorial/tree/master/src/simple-todos/step07) 
 
