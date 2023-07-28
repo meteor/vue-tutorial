@@ -24,9 +24,9 @@ You need to add first a publication to your server, this publication should publ
 Create a new file called `tasksPublications.js` in the `api` folder.
 
 `imports/api/tasksPublications.js`
-```js
+```javascript
 import { Meteor } from 'meteor/meteor';
-import { TasksCollection } from '/imports/db/TasksCollection';
+import { TasksCollection } from '../db/TasksCollection';
 
 Meteor.publish('tasks', function publishTasks() {
   return TasksCollection.find({ userId: this.userId });
@@ -39,30 +39,34 @@ The last part is to make sure your server is registering this publication, you c
 
 `server/main.js`
 ```js
-import { Meteor } from 'meteor/meteor';
-import { Accounts } from 'meteor/accounts-base';
-import { TasksCollection } from '/imports/db/TasksCollection';
-import '/imports/api/tasksMethods';
-import '/imports/api/tasksPublications';
+import { Meteor } from 'meteor/meteor'
+import { Accounts } from 'meteor/accounts-base'
+import { TasksCollection } from '../imports/db/TasksCollection'
+import "../imports/api/tasksMethods"
+import "../imports/api/tasksPublications"
 ```
 
 ## 9.3: Tasks Subscription
 
 Then we can subscribe to that publication in the client.
 
-As we want to receive changes from this publication we are going to `subscribe` to it inside our `meteor` object with `$subscribe`. See the [documentation](https://www.npmjs.com/package/vue-meteor-tracker#subscriptions) for more information.
+As we want to receive changes from this publication we are going to use the `subscribe` function. But the difference now is that we will save the return of this function in a variable, this return is an object with the subscription state and the data from the publication. See the [documentation](https://github.com/meteor-vue/vue-meteor-tracker#composition-api) for more information.
 
 `imports/ui/App.vue`
-```vue
-..
-meteor: {
-    $subscribe: {
-      'tasks': []
-    },
-    tasks() {
-..
-}
-..
+```javascript
+...
+
+watch(
+  () => user.value,
+  (newUser) => {
+    isLogged.value = !!newUser
+  },
+  { immediate: true }
+)
+
+const tasksSubscribe = subscribe('tasks')
+
+...
 ```
 
 ## 9.4: Loading state
@@ -71,36 +75,22 @@ You should also add a loading state for your app, that means, while the subscrip
 
 `imports/ui/App.vue`
 
-```vue
-..
+```javascript
+...
+
+<div v-if="!tasksSubscribe.ready.value" class="flex items-center justify-center h-64">
+  <p class="text-gray-600">Loading...</p>
 </div>
+<ul class="list-none list-inside pr-4 pt-4 md:w-96">
+  <Task v-for="task of tasks" :key="task._id" :task="task" />
+</ul>
 
-<div class="loading" v-if="!$subReady.tasks">Loading...</div>
-
-<ul class="tasks">
-..
-```
-
-Let's style this loading a little as well:
-
-`client/main.css`
-
-```css
-.loading {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-
-  justify-content: center;
-  align-items: center;
-
-  font-weight: bold;
-}
+...
 ```
 
 Once you have done this, all the tasks will reappear.
 
-Calling `Meteor.publish` on the server registers a publication named `tasks`. When `Meteor.subscribe` is called on the client with the publication name, the client subscribes to all the data from that publication, which in this case is all the tasks in the database for the authenticated user. 
+Calling `Meteor.publish` on the server registers a publication named `tasks`. When `Meteor.subscribe` is called on the client with the publication name, the client subscribes to all the data from that publication, which in this case is all the tasks in the database for the authenticated user.
 
 ## 9.5: Check User Permission
 
@@ -108,7 +98,8 @@ Only the owner of a task should be able to change certain things. You should cha
 
 `imports/api/tasksMethods.js`
 ```js
-..
+...
+
   'tasks.remove'(taskId) {
     check(taskId, String);
 
@@ -145,7 +136,8 @@ Only the owner of a task should be able to change certain things. You should cha
       },
     });
   },
-..
+  
+...
 ```
 
 Why this is important if we are not returning tasks from other users in the client?
