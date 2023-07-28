@@ -69,7 +69,7 @@ In this example we are going to use `vue-tutorial.meteorapp.com` but make sure y
 Run the deploy command:
 
 ```shell script
-meteor deploy vue-tutorial.meteorapp.com --free --mongo
+meteor deploy vue3-tutorial.meteorapp.com --free --mongo
 ```
 
 > If you are not using the free hosting with MongoDB on Galaxy, then remove the `mongo` flag from the deploy script and add `--settings private/settings.json` with the proper setting for your app.

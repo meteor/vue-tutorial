@@ -25,7 +25,7 @@ meteor run ios
 
 You will see the iOS simulator pop up with your app running inside.
 
-<img width="300px" src="/simple-todos/assets/step10-ios-simulator.png"/>
+<img class="step-images" src="/simple-todos/assets/new-screenshots/step10/ios-screenshot.png"/>
 
 ## 10.2: Android Emulator
 
