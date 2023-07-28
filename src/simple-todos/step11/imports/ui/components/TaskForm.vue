@@ -1,34 +1,21 @@
-<template>
-  <form class="task-form" @submit.prevent="handleSubmit">
-    <input
-        type="text"
-        placeholder="Type to add new tasks"
-        v-model="newTask"
-    />
-    <button type="submit">Add Task</button>
-  </form>
-</template>
+<script setup>
+import { Meteor } from 'meteor/meteor'
+import { ref } from 'vue'
 
-<script>
-import Vue from "vue";
-import { Meteor } from 'meteor/meteor';
-import { TasksCollection } from "../../db/TasksCollection";
+const newTask = ref('')
 
-export default {
-  data() {
-    return {
-      newTask: ""
-    }
-  },
-  methods: {
-    handleSubmit(event) {
-      if (this.newTask.length === 0) return;
-
-      Meteor.call('tasks.insert', this.newTask.trim());
-
-      // Clear form
-      this.newTask = "";
-    }
-  },
+const addTask = () => {
+    Meteor.call('tasks.insert', newTask.value.trim())
+    newTask.value = ''
 }
 </script>
+
+<template>
+    <form @submit.prevent="addTask">
+        <input
+            class=" border border-gray-300 rounded-md py-2 px-4 mr-2 text-gray-600 text-sm focus:outline-none focus:border-gray-400 focus:ring-0"
+            type="text" v-model="newTask" placeholder="Type to add new tasks" />
+        <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1.5 px-4 rounded" type="submit">Add
+            Task</button>
+    </form>
+</template>
