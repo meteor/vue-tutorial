@@ -59,6 +59,7 @@ mongo-id@1.0.8
 npm-mongo@4.16.0
 ordered-dict@1.1.0
 promise@0.12.2
+quave:testing@1.0.1
 random@1.2.1
 rate-limit@1.1.1
 react-fast-refresh@0.2.7
