@@ -64,7 +64,7 @@ const toggleHideCompleted = () => {
             <span v-else>Hide completed</span>
           </button>
         </div>
-        <ul class="list-none list-inside pr-4 pt-4 md:w-96">
+        <ul class="list-none list-inside pt-4 md:w-96">
           <Task v-for="task of tasks" :key="task._id" :task="task" />
         </ul>
       </div>

@@ -15,7 +15,7 @@ const tasks = autorun(() => TasksCollection.find({}, { sort: { createdAt: -1 } }
   <div class="mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:px-8">
     <div class="mb-8 md:w-96 md:mx-auto md:mb-0 md:mt-8 md:px-4 md:py-8 text-center md:bg-gray-100 md:rounded-lg">
       <TaskForm />
-      <ul class="list-none list-inside pr-4 pt-4 md:w-96">
+      <ul class="list-none list-inside pt-4 md:w-96">
         <Task v-for="task of tasks" :key="task._id" :task="task" />
       </ul>
     </div>

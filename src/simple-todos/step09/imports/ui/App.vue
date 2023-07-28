@@ -67,7 +67,7 @@ const toggleHideCompleted = () => {
         <div v-if="!tasksSubscribe.ready.value" class="flex items-center justify-center h-64">
           <p class="text-gray-600">Loading...</p>
         </div>
-        <ul class="list-none list-inside pr-4 pt-4 md:w-96">
+        <ul class="list-none list-inside pt-4 md:w-96">
           <Task v-for="task of tasks" :key="task._id" :task="task" />
         </ul>
       </div>

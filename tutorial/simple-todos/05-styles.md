@@ -17,7 +17,7 @@ Lets starting at App.vue:
   <div class="mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:px-8">
     <div class="mb-8 md:w-96 md:mx-auto md:mb-0 md:mt-8 md:px-4 md:py-8 text-center md:bg-gray-100 md:rounded-lg">
       <TaskForm />
-      <ul class="list-none list-inside pr-4 pt-4 md:w-96">
+      <ul class="list-none list-inside pt-4 md:w-96">
         <Task v-for="task of tasks" :key="task._id" :task="task" />
       </ul>
     </div>
@@ -51,8 +51,8 @@ And, Task.vue:
 `imports/ui/components/Task.vue`
 ```javascript
 <template>
-  <div class="flex items-center rounded mr-4 p-4 py-2 mb-2 
-    shadow-sm border border-gray-200
+  <div class="flex items-center rounded p-4 py-2 mb-2 
+    shadow-sm border border-gray-200 md:mr-8
   ">
     <li>
       <input type="checkbox" readonly :checked="taskRef.checked" v-model="taskRef.checked" />

@@ -26,8 +26,9 @@ watch(
 </script>
 
 <template>
-  <div class="flex items-center rounded mr-4 p-4 py-2 mb-2 
+  <div class="flex items-center rounded p-4 py-2 mb-2 
     shadow-sm border border-gray-200
+    md:mr-8
   ">
     <li>
       <input type="checkbox" readonly :checked="taskRef.checked" v-model="taskRef.checked" />
