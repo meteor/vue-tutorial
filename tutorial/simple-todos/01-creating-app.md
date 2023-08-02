@@ -71,7 +71,7 @@ And also create a file called `.prettierrc` and paste the code bellow.
 `.prettierrc`
 ```json
 {
-  "semi": false,
+  "semi": true,
   "singleQuote": true,
   "tabWidth": 2,
   "printWidth": 80

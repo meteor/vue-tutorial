@@ -11,9 +11,9 @@ Meteor.methods({
 
     TasksCollection.insert({
       text,
-      createdAt: new Date,
+      createdAt: new Date(),
       userId: this.userId,
-    })
+    });
   },
 
   'tasks.remove'(taskId) {
@@ -32,9 +32,9 @@ Meteor.methods({
     TasksCollection.remove(taskId);
   },
 
-  'tasks.setIsChecked'(taskId, isChecked) {
+  'tasks.setIsChecked'(taskId, checked) {
     check(taskId, String);
-    check(isChecked, Boolean);
+    check(checked, Boolean);
 
     if (!this.userId) {
       throw new Meteor.Error('Not authorized.');
@@ -48,7 +48,7 @@ Meteor.methods({
 
     TasksCollection.update(taskId, {
       $set: {
-        isChecked,
+        checked,
       },
     });
   },

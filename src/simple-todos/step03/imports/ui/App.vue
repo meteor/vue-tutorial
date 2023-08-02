@@ -1,11 +1,13 @@
 <script setup>
-import Task from './components/Task.vue'
+import Task from './components/Task.vue';
 import TaskForm from './components/TaskForm.vue';
-import { subscribe, autorun } from 'vue-meteor-tracker'
-import { TasksCollection } from '../api/TasksCollection'
+import { subscribe, autorun } from 'vue-meteor-tracker';
+import { TasksCollection } from '../api/TasksCollection';
 
-subscribe('tasks')
-const tasks = autorun(() => TasksCollection.find({}, { sort: { createdAt: -1 } }).fetch()).result
+subscribe('tasks');
+const tasks = autorun(() =>
+  TasksCollection.find({}, { sort: { createdAt: -1 } }).fetch(),
+).result;
 </script>
 
 <template>

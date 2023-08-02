@@ -1,7 +1,7 @@
-import { Meteor } from 'meteor/meteor'
-import { Accounts } from 'meteor/accounts-base'
-import { TasksCollection } from '../imports/db/TasksCollection'
-import "../imports/api/tasksMethods"
+import { Meteor } from 'meteor/meteor';
+import { Accounts } from 'meteor/accounts-base';
+import { TasksCollection } from '../imports/db/TasksCollection';
+import '../imports/api/tasksMethods';
 
 const insertTask = (taskText, user) =>
   TasksCollection.insert({
@@ -32,6 +32,6 @@ Meteor.startup(() => {
       'Fifth Task',
       'Sixth Task',
       'Seventh Task',
-    ].forEach(taskText => insertTask(taskText, user));
+    ].forEach((taskText) => insertTask(taskText, user));
   }
 });

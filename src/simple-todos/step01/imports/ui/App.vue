@@ -1,13 +1,13 @@
 <script setup>
-import Task from './components/Task.vue'
+import Task from './components/Task.vue';
 
 const getTasks = () => {
   return [
     { _id: 1, text: 'This is task 1' },
     { _id: 2, text: 'This is task 2' },
     { _id: 3, text: 'This is task 3' },
-  ]
-}
+  ];
+};
 </script>
 
 <template>

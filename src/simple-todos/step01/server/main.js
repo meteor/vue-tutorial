@@ -1,8 +1,8 @@
-import { Meteor } from 'meteor/meteor'
-import { LinksCollection } from '/imports/api/links'
+import { Meteor } from 'meteor/meteor';
+import { LinksCollection } from '/imports/api/links';
 
 async function insertLink({ title, url }) {
-  await LinksCollection.insertAsync({ title, url, createdAt: new Date() })
+  await LinksCollection.insertAsync({ title, url, createdAt: new Date() });
 }
 
 Meteor.startup(async () => {
@@ -11,21 +11,21 @@ Meteor.startup(async () => {
     await insertLink({
       title: 'Do the Tutorial',
       url: 'https://vuejs.org/guide/quick-start.html',
-    })
+    });
 
     await insertLink({
       title: 'Follow the Guide',
       url: 'https://guide.meteor.com',
-    })
+    });
 
     await insertLink({
       title: 'Read the Docs',
       url: 'https://docs.meteor.com',
-    })
+    });
 
     await insertLink({
       title: 'Discussions',
       url: 'https://forums.meteor.com',
-    })
+    });
   }
-})
+});
