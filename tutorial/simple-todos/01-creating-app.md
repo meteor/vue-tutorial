@@ -38,11 +38,7 @@ Vue do not have native support on vscode for example. To configure Vue on your f
 
 To install prettier and eslint, run:
 ```
-meteor npm install --save-dev prettier @prettier/plugin-php
-```
-
-```
-meteor npm install --save-dev eslint eslint-plugin-vue eslint-config-prettier eslint-plugin-prettier
+meteor npm install --save-dev prettier eslint eslint-plugin-vue eslint-config-prettier eslint-plugin-prettier
 ```
 
 Now, create a file called `.eslintrc.js` and paste the code bellow.
