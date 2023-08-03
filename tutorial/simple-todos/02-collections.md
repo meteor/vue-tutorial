@@ -96,8 +96,12 @@ const tasks = autorun(() => TasksCollection.find({}).fetch()).result
 </template>
 ```
 
-If you remember, we created our app using the `--prototype` flag, which means that we are using the `autopublish` package, which publishes all the data from the server to the client. This is not something that you want to do in production, but it is good for prototyping. We'll talk more about this in step 9.
+Meteor skeletons are secure by default, but that is not what we want right now, so let's add `autopublish` package so that we can more easily prototype with out data:
+```bash
+meteor add autopublish
+```
 
+This is only for prototyping and is not something to do in any application that you are going to deploy. We'll talk more about this in step 9.
 See how your app should look like now:
 
 <img class="step-images" src="/simple-todos/assets/step02-task-list.png"/>
