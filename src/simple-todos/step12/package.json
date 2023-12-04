@@ -8,9 +8,9 @@
     "visualize": "meteor --production --extra-packages bundle-visualizer"
   },
   "dependencies": {
-    "@babel/runtime": "^7.16.7",
-    "bcrypt": "^5.0.1",
-    "meteor-node-stubs": "^1.1.0",
+    "@babel/runtime": "^7.23.5",
+    "bcrypt": "^5.1.1",
+    "meteor-node-stubs": "^1.2.7",
     "vue": "^2.6.14",
     "vue-meteor-tracker": "^2.0.0-beta.5"
   },
@@ -22,6 +22,6 @@
     "testModule": "tests/main.js"
   },
   "devDependencies": {
-    "chai": "^4.3.4"
+    "chai": "^4.3.10"
   }
 }

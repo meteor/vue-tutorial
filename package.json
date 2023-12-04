@@ -6,21 +6,21 @@
     "version": "3.9.0"
   },
   "devDependencies": {
-    "@quave/eslint-config-quave": "^1.0.3",
+    "@quave/eslint-config-quave": "^1.0.7",
     "canonical-json": "0.0.4",
     "chexo": "1.0.7",
-    "handlebars": "4.4.3",
+    "handlebars": "4.7.8",
     "hexo": "3.9.0",
     "hexo-prism-plus": "^1.1.0",
     "hexo-renderer-ejs": "^1.0.0",
     "hexo-renderer-less": "0.2.0",
-    "hexo-renderer-marked": "^3.2.0",
+    "hexo-renderer-marked": "^3.3.0",
     "hexo-server": "1.0.0",
     "hexo-versioned-netlify-redirects": "1.1.0",
     "meteor-hexo-config": "1.0.12",
-    "meteor-theme-hexo": "2.0.2",
-    "showdown": "1.9.0",
-    "underscore": "1.9.1"
+    "meteor-theme-hexo": "2.0.3",
+    "showdown": "1.9.1",
+    "underscore": "1.13.6"
   },
   "scripts": {
     "build": "chexo meteor-hexo-config -- generate",
