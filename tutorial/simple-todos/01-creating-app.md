@@ -5,7 +5,7 @@ title: "1: Creating the app"
 ## 1.1: Install Meteor
 First we need to install Meteor.
 
-Install the latest official Meteor release [following the steps in our docs](https://docs.meteor.com/install.html).
+Install the latest official Meteor release [following the steps in our docs](https://docs.meteor.com/about/install.html).
 
 ## 1.2: Create Meteor Project
 
